@@ -12,7 +12,7 @@ def make_md5(text):
     return hashlib.md5(text).hexdigest()
 
 # from http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
-def mkdirs(path):
+def makedirs(path):
     try:
         os.makedirs(path)
     except OSError as exc: # Python >2.5

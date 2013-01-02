@@ -7,7 +7,7 @@ import logging
 
 import requests
 
-from .utils import date_to_parlis_str, make_md5, makedirs
+from .utils import date_to_parlis_str, make_md5, makedirs, get_dates
 
 logger = logging.getLogger(__name__)
 
@@ -171,4 +171,5 @@ class ParlisCrawler(object):
         self.end_date = end_date
 
     def run(self):
-        pass
+        for current_date in get_dates(self.start_date, self.end_date):
+            logger.info('Going to fetch data for %s, filtered by %s on %s', self.entity, self.attribute, current_date)
