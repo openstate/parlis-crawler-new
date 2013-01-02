@@ -9,7 +9,13 @@ import requests
 from .utils import date_to_parlis_str, make_md5, makedirs
 
 class ParlisBaseCache(object):
-    def cache(self, result, entity, relation, url, params = {}):
+    def hit(self, entity, relation, url, params={}):
+        raise NotImplementedError
+
+    def load(self, entity, relation, url, params={}):
+        raise NotImplementedError
+
+    def store(self, result, entity, relation, url, params={}):
         raise NotImplementedError
 
 class ParlisFileCache(ParlisBaseCache):
@@ -20,7 +26,7 @@ class ParlisFileCache(ParlisBaseCache):
         self.output_base_path = output_base_path
         self.date_str = date_str
 
-    def cache(self, result, entity, relation, url, params = {}):
+    def _get_dirs(self, entity, relation, url, params={}):
         if relation is not None:
             dirs = '%s/%s/%s/%s' % (
                 self.output_base_path,
@@ -35,8 +41,9 @@ class ParlisFileCache(ParlisBaseCache):
                 entity
             )
 
-        makedirs(dirs)
+        return dirs
 
+    def _get_filename(self, dirs, url, params={}):
         if not params.has_key('$skip'):
             path = '%s/%s.xml' % (
                 dirs,
@@ -48,6 +55,28 @@ class ParlisFileCache(ParlisBaseCache):
                 make_md5(url),
                 str(params['$skip'])
             )
+
+    def hit(self, entity, relation, url, params={}):
+        dirs = self._get_dirs(entity, relation, url, params)
+        path = self._get_filename(dirs, url, params)
+        return os.path.isfile(path)
+
+    def load(self, entity, relation, url, params={}):
+        dirs = self._get_dirs(entity, relation, url, params)
+        path = self._get_filename(dirs, url, params)
+        
+        f = codecs.open(path, 'r', 'utf-8')
+        text = f.read()
+        f.close()
+
+        return text
+
+    def store(self, result, entity, relation, url, params={}):
+        dirs = self._get_dirs(entity, relation, url, params)
+
+        makedirs(dirs)
+
+        path = self._get_filename(dirs, url, params)
 
         f = codecs.open(path, 'w', 'utf-8')
         f.write(result.text)
@@ -65,17 +94,25 @@ class ParlisAPI(object):
         self.cache = cache
 
     def _get_request(self, url, params={}, entity=None, relation=None):
-        result = requests.get(
-            url,
-            params=params,
-            verify=False,
-            auth=(self.username, self.password)
-        )
+        is_hit = (self.cache is not None) and self.cache.hit(entity, relation, url, params)
+        contents = u''
 
-        if self.cache is not None:
-            self.cache.cache(result, entity, relation, url, params)
+        if not is_hit:
+            result = requests.get(
+                url,
+                params=params,
+                verify=False,
+                auth=(self.username, self.password)
+            )
 
-        return result
+            if self.cache is not None:
+                self.cache.store(result, entity, relation, url, params)
+
+            contents = result.text
+        else:
+            contents = self.cache.load(entity, relation, url, params)
+
+        return contents
 
     def _post_request(self, url, params={}, data={}, entity=None, relation=None):
         pass
