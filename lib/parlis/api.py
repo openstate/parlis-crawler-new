@@ -59,7 +59,7 @@ class ParlisAPI(object):
             relation=relation
         )
 
-    def _fetch_recent(self, entity, relation=None, skip=0, attribute='GewijzijgdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date()):
+    def fetch_recent(self, entity, relation=None, skip=0, attribute='GewijzijgdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date()):
         date_filter = "%s ge datetime'%s' and %s le datetime'%s'" % (
             attribute,
             date_to_parlis_str(start_date),

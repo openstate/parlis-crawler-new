@@ -43,17 +43,13 @@ class ParlisSubtreeParser(object):
         ]
     }
 
-    def __init__(self, filename, entity):
-        self.filename = filename
-        self.entity = entity
-
-    def parse(self):
+    def parse(self, entity, contents):
         urls = {} # hash of relation => url
 
-        if not self.subtree_filters.has_key(self.entity):
+        if not self.subtree_filters.has_key(entity):
             return urls # if no filter was found, then no subtree parsing!
 
-        tree = etree.parse(filename)
+        tree = etree.fromstring(contents)
         for elem in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'):
             base_url = elem.text
             for relation in self.subtree_filters[self.entity]:
