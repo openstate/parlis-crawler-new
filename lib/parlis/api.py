@@ -14,12 +14,41 @@ class ParlisAPI(object):
     base_url = 'https://api.tweedekamer.nl/APIDataService/v1' # no slash at the end
     cache = None
 
+    subtree_filters = {
+        'Zaken': [
+            'ZaakActoren',
+            'Statussen',
+            'KamerstukDossier',
+            'Documenten',
+            'Activiteiten',
+            'Besluiten',
+            'GerelateerdVanuit',
+            'GerelateerdNaar',
+            'HoofdOverig',
+            'GerelateerdOverig',
+            'VervangenVanuit',
+            'VervangenDoor',
+            'Agendapunten'
+        ],
+        'Activiteiten': [
+            'ActiviteitActoren',
+            'Agendapunten',
+            'Documenten',
+            'Zaken',
+            'VoortgezetVanuit',
+            'VoortgezetIn',
+            'VervangenVanuit',
+            'VervangenDoor',
+            'Reserveringen'
+        ]
+    }
+
     def __init__(self, username, passwd, cache=None):
         self.username = username
         self.password = password
         self.cache = cache
 
-    def _get_request(self, url, params={}, entity=None, relation=None):
+    def get_request(self, url, params={}, entity=None, relation=None):
         is_hit = (self.cache is not None) and self.cache.hit(entity, relation, url, params)
         contents = u''
 
@@ -41,7 +70,7 @@ class ParlisAPI(object):
 
         return contents
 
-    def _post_request(self, url, params={}, data={}, entity=None, relation=None):
+    def post_request(self, url, params={}, data={}, entity=None, relation=None):
         pass
 
     def _fetch(self, entity, relation = None, skip=0, filter=None):
@@ -52,7 +81,7 @@ class ParlisAPI(object):
         if filter is not None:
             params['$filter'] = filter
 
-        return self._get_request(
+        return self.get_request(
             '%s/%s/' % (self.base_url, entity),
             params=params,
             entity=entity,
