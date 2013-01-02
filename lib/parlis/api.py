@@ -14,35 +14,6 @@ class ParlisAPI(object):
     base_url = 'https://api.tweedekamer.nl/APIDataService/v1' # no slash at the end
     cache = None
 
-    subtree_filters = {
-        'Zaken': [
-            'ZaakActoren',
-            'Statussen',
-            'KamerstukDossier',
-            'Documenten',
-            'Activiteiten',
-            'Besluiten',
-            'GerelateerdVanuit',
-            'GerelateerdNaar',
-            'HoofdOverig',
-            'GerelateerdOverig',
-            'VervangenVanuit',
-            'VervangenDoor',
-            'Agendapunten'
-        ],
-        'Activiteiten': [
-            'ActiviteitActoren',
-            'Agendapunten',
-            'Documenten',
-            'Zaken',
-            'VoortgezetVanuit',
-            'VoortgezetIn',
-            'VervangenVanuit',
-            'VervangenDoor',
-            'Reserveringen'
-        ]
-    }
-
     def __init__(self, username, passwd, cache=None):
         self.username = username
         self.password = password
