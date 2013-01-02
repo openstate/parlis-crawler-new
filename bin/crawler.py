@@ -10,6 +10,7 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 import os
 import sys
 import getopt
+import logging
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../lib')))
 
@@ -19,6 +20,8 @@ help_message = '''
 The help message goes here.
 '''
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class Usage(Exception):
     def __init__(self, msg):
@@ -26,6 +29,8 @@ class Usage(Exception):
 
 
 def main(argv=None):
+    logger.info('Starting up ...')
+
     if argv is None:
         argv = sys.argv
     try:

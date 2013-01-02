@@ -3,10 +3,14 @@ import os
 import re
 import datetime
 import codecs
+import logging
 
 import requests
 
 from .utils import date_to_parlis_str, make_md5, makedirs
+
+logger = logging.getLogger(__name__)
+
 
 class ParlisBaseCache(object):
     def hit(self, entity, relation, url, params={}):
@@ -17,6 +21,7 @@ class ParlisBaseCache(object):
 
     def store(self, result, entity, relation, url, params={}):
         raise NotImplementedError
+
 
 class ParlisFileCache(ParlisBaseCache):
     output_base_path = '.'
@@ -59,12 +64,14 @@ class ParlisFileCache(ParlisBaseCache):
     def hit(self, entity, relation, url, params={}):
         dirs = self._get_dirs(entity, relation, url, params)
         path = self._get_filename(dirs, url, params)
+        logger.info('Checking for filename : %s', path)
         return os.path.isfile(path)
 
     def load(self, entity, relation, url, params={}):
         dirs = self._get_dirs(entity, relation, url, params)
         path = self._get_filename(dirs, url, params)
         
+        logger.info('Now reading from cache file: %s', path)
         f = codecs.open(path, 'r', 'utf-8')
         text = f.read()
         f.close()
@@ -78,9 +85,16 @@ class ParlisFileCache(ParlisBaseCache):
 
         path = self._get_filename(dirs, url, params)
 
+        logger.info('Now storing into cache file: %s', path)
         f = codecs.open(path, 'w', 'utf-8')
         f.write(result.text)
         f.close()
+
+
+class ParlisForceFileCache(ParlisFileCache):
+    def hit(self, entity, relation, url, params={}):
+        return False # always fetch urls, store into file
+
 
 class ParlisAPI(object):
     username = None
@@ -98,6 +112,7 @@ class ParlisAPI(object):
         contents = u''
 
         if not is_hit:
+            logger.info('Now fetching URL : %s', url)
             result = requests.get(
                 url,
                 params=params,
@@ -141,3 +156,19 @@ class ParlisAPI(object):
         )
 
         return self._fetch(entity, relation, skip, date_filter)
+
+
+class ParlisCrawler(object):
+    entity = 'Zaken'
+    attribute = 'GewijzigdOp'
+    start_date = None
+    end_date = None
+
+    def __init__(self, entity='Zaken', attribute='GewijzigdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date()):
+        self.entity = entity
+        self.attribute = attribute
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def run(self):
+        pass
