@@ -28,19 +28,27 @@ class ParlisCrawler(object):
         api = ParlisAPI('SOS', 'Open2012', cache)
         for current_date in get_dates(self.start_date, self.end_date):
             cache.date_str = str(current_date)
-            logger.info('Going to fetch data for %s, filtered by %s on %s', self.entity, self.attribute, current_date)
-            contents = api.fetch_recent(self.entity, None, 0, self.attribute, self.start_date, self.end_date)
+			entity_count = 0
+			last_items_fetched = 250
 
-			entity_properties, entities = ParlisParser(contents, self.entity, None).parse()
+			while (last_items_fetched >= 250):
+				logger.info('Going to fetch data for %s, filtered by %s on %s, skipping %s items', self.entity, self.attribute, current_date, entity_count)
+				contents = api.fetch_recent(self.entity, None, entity_count, self.attribute, self.start_date, self.end_date)
 
-			ParlisTSVFormatter(entity_properties).format(entities, self.entity, None)
+				entity_properties, entities = ParlisParser(contents, self.entity, None).parse()
 
-            # fetch the subtree, if necessary
-            subtree_parser = ParlisSubtreeParser()
-            urls = subtree_parser.parse(self.entity, contents)
-            for relation in urls:
-                relation_contents = api.get_request(urls[relation], {}, self.entity, relation)
+				ParlisTSVFormatter(entity_properties).format(entities, self.entity, None)
 
-				relation_properties, relation_entities = ParlisParser(relation_contents, self.entity, relation).parse()
+				last_items_fetched = len(entities)
+				entity_count += last_items_fetched
 
-				ParlisTSVFormatter(relation_properties).format(relation_entities, self.entity, relation)
+				# fetch the subtree, if necessary
+				subtree_parser = ParlisSubtreeParser()
+				urls = subtree_parser.parse(self.entity, contents)
+
+				for relation in urls:
+					relation_contents = api.get_request(urls[relation], {}, self.entity, relation)
+
+					relation_properties, relation_entities = ParlisParser(relation_contents, self.entity, relation).parse()
+
+					ParlisTSVFormatter(relation_properties).format(relation_entities, self.entity, relation)
