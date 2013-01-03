@@ -4,6 +4,8 @@ import re
 import logging
 import codecs
 
+from .utils import tsv_escape
+
 logger = logging.getLogger(__name__)
 
 
@@ -32,7 +34,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
 			f = codecs.open(filename, 'a', 'utf-8')
 
 		for row in rows:
-			row_items = [row[item_prop] for item_prop in self.properties]
+			row_items = [tsv_escape(row[item_prop]) for item_prop in self.properties]
 			f.write(u"\t".join(row_items) + "\n"
 
 		f.close()

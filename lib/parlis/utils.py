@@ -25,3 +25,6 @@ def get_dates(from_date, end_date):
     while from_date <= end_date:
         yield from_date
         from_date = from_date + datetime.timedelta(days=1)
+
+def tsv_escape(text):
+	return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
