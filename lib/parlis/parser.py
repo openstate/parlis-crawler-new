@@ -22,23 +22,25 @@ class ParlisParser(object):
             self.properties = [x.tag.split('}')[1] for x in properties.getchildren()]
 
 	def parse(self):
-		SID = tree.find('.//{http://www.w3.org/2005/Atom}id')
-        if SID is None:
-            continue
+		for entry in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+			SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
+			if SID is None:
+				continue
 
-        SID = SID.text.split('\'')[1]
-		for subtree in tree.iterfind('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'):
-			row = {
-				'SID': SID
-			}
+			SID = SID.text.split('\'')[1]
 
-			for item_prop in self.properties:
-				attribuut = subtree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices}'+item_prop)
-				if attribuut is not None and attribuut.text is not None:
-					row[item_prop] = attribuut.text
-				else:
-					row[item_prop] = None
+			for subtree in entry.iterfind('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'):
+				row = {
+					'SID': SID
+				}
 
-			self.data.append(row)
+				for item_prop in self.properties:
+					attribuut = subtree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices}'+item_prop)
+					if attribuut is not None and attribuut.text is not None:
+						row[item_prop] = attribuut.text
+					else:
+						row[item_prop] = None
 
-			return (self.properties, self.data)
+				self.data.append(row)
+
+		return (self.properties, self.data)
