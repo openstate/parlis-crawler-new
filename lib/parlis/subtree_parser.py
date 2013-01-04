@@ -52,7 +52,8 @@ class ParlisSubtreeParser(object):
         tree = etree.fromstring(contents)
         for elem in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'):
             base_url = elem.text
+            SID = elem.text.split('/')[-1]
             for relation in self.subtree_filters[self.entity]:
-                urls[relation] = u'%s/%s' % (base_url, relation)
+                urls[SID] = (relation, u'%s/%s' % (base_url, relation))
 
         return urls

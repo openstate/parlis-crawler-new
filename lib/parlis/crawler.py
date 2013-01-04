@@ -46,9 +46,12 @@ class ParlisCrawler(object):
 				subtree_parser = ParlisSubtreeParser()
 				urls = subtree_parser.parse(self.entity, contents)
 
-				for relation in urls:
-					relation_contents = api.get_request(urls[relation], {}, self.entity, relation)
+				for SID in urls:
+				    relation = urls[SID][0]
+				    relation_url = urls[SID][1]
+					relation_contents = api.get_request(relation_url, {}, self.entity, relation)
 
-					relation_properties, relation_entities = ParlisParser(relation_contents, self.entity, relation).parse()
+                    parent_name = 'SID_%s' % (self.entity, )
+					relation_properties, relation_entities = ParlisParser(relation_contents, self.entity, relation, [parent_name]).parse({parent_name: SID})
 
 					ParlisTSVFormatter(relation_properties).format(relation_entities, self.entity, relation)

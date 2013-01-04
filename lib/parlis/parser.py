@@ -10,7 +10,7 @@ class ParlisParser(object):
 	data = []
 	tree = None
 
-	def __init__(self, contents, entity, relation = None):
+	def __init__(self, contents, entity, relation = None, extra_properties = []):
 		 try:
             self.tree = etree.fromstring(contents)
         except etree.XMLSyntaxError, e:
@@ -19,9 +19,11 @@ class ParlisParser(object):
 
 		properties = tree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties')
         if properties is not None:
-            self.properties = [x.tag.split('}')[1] for x in properties.getchildren()]
+            self.properties = list(set(
+                extra_properties + [x.tag.split('}')[1] for x in properties.getchildren()]
+            ))
 
-	def parse(self):
+	def parse(self, extra_attributes = {}):
 		for entry in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
 			SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
 			if SID is None:
@@ -30,9 +32,8 @@ class ParlisParser(object):
 			SID = SID.text.split('\'')[1]
 
 			for subtree in entry.iterfind('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'):
-				row = {
-					'SID': SID
-				}
+				row = extra_attributes
+				row['SID'] = SID
 
 				for item_prop in self.properties:
 					attribuut = subtree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices}'+item_prop)
