@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 class ParlisAPI(object):
     username = None
     password = None
-    base_url = 'https://api.tweedekamer.nl/APIDataService/v1' # no slash at the end
+    # no slash at the end!
+    base_url = 'https://api.tweedekamer.nl/APIDataService/v1'
     cache = None
 
     def __init__(self, username, passwd, cache=None):

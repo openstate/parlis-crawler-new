@@ -17,7 +17,9 @@ class ParlisParser(object):
             logger.exception("XML file for %s failed to parse" % (entity, ))
             self.tree = None
 
-		properties = tree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties')
+		properties = tree.find(
+		    './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
+		)
         if properties is not None:
             self.properties = list(set(
                 extra_properties + [x.tag.split('}')[1] for x in properties.getchildren()]
@@ -31,12 +33,16 @@ class ParlisParser(object):
 
 			SID = SID.text.split('\'')[1]
 
-			for subtree in entry.iterfind('.//{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'):
+			for subtree in entry.iterfind(
+			    './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
+			):
 				row = extra_attributes
 				row['SID'] = SID
 
 				for item_prop in self.properties:
-					attribuut = subtree.find('.//{http://schemas.microsoft.com/ado/2007/08/dataservices}'+item_prop)
+					attribuut = subtree.find(
+					    './/{http://schemas.microsoft.com/ado/2007/08/dataservices}' + item_prop
+					)
 					if attribuut is not None and attribuut.text is not None:
 						row[item_prop] = attribuut.text
 					else:

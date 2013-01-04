@@ -50,7 +50,9 @@ class ParlisSubtreeParser(object):
             return urls # if no filter was found, then no subtree parsing!
 
         tree = etree.fromstring(contents)
-        for elem in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'):
+        for elem in tree.iterfind(
+            './/{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'
+        ):
             base_url = elem.text
             SID = elem.text.split('/')[-1]
             for relation in self.subtree_filters[self.entity]:

@@ -61,7 +61,9 @@ def main(argv=None):
             if option in ("-t", "--till"):
                 end_date = datetime.datetime.strptime(value, '%Y-%m-%d').date()
 
-        parlis_crawler = parlis.ParlisCrawler(entity, attribute, start_date, end_date)
+        parlis_crawler = parlis.ParlisCrawler(
+            entity, attribute, start_date, end_date
+        )
         parlis_crawler.run()
 
     except Usage, err:
