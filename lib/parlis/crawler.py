@@ -32,12 +32,30 @@ class ParlisCrawler(object):
 			last_items_fetched = 250
 
 			while (last_items_fetched >= 250):
-				logger.info('Going to fetch data for %s, filtered by %s on %s, skipping %s items', self.entity, self.attribute, current_date, entity_count)
-				contents = api.fetch_recent(self.entity, None, entity_count, self.attribute, self.start_date, self.end_date)
+				logger.info(
+				    'Going to fetch data for %s, filtered by %s on %s, skipping %s items',
+				    self.entity, self.attribute, current_date, entity_count
+				)
 
-				entity_properties, entities = ParlisParser(contents, self.entity, None).parse()
+				contents = api.fetch_recent(
+				    self.entity,
+				    None,
+				    entity_count,
+				    self.attribute,
+				    self.start_date,
+				    self.end_date
+				)
 
-				ParlisTSVFormatter(entity_properties).format(entities, self.entity, None)
+				entity_properties, entities = ParlisParser(
+				    contents, self.entity, None
+				).parse()
+
+				ParlisTSVFormatter(entity_properties).format(
+				    entities,
+				    self.entity,
+				    None,
+				    'output/%s' % (current_date, )
+				)
 
 				last_items_fetched = len(entities)
 				entity_count += last_items_fetched
@@ -49,9 +67,19 @@ class ParlisCrawler(object):
 				for SID in urls:
 				    relation = urls[SID][0]
 				    relation_url = urls[SID][1]
-					relation_contents = api.get_request(relation_url, {}, self.entity, relation)
+					relation_contents = api.get_request(
+					    relation_url, {}, self.entity, relation
+					)
 
                     parent_name = 'SID_%s' % (self.entity, )
-					relation_properties, relation_entities = ParlisParser(relation_contents, self.entity, relation, [parent_name]).parse({parent_name: SID})
+					relation_properties, relation_entities = ParlisParser(
+					    relation_contents, self.entity, relation, [parent_name]
+					).parse({parent_name: SID})
 
-					ParlisTSVFormatter(relation_properties).format(relation_entities, self.entity, relation)
+					ParlisTSVFormatter(relation_properties).format(
+					    relation_entities,
+					    self.entity,
+					    relation,
+					    'output/%s' % (current_date, )
+					)
+

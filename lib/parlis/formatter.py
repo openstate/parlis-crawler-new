@@ -20,12 +20,12 @@ class ParlisBaseFormatter(object):
 
 		
 class ParlisTSVFormatter(ParlisBaseFormatter):
-	def format(self, rows, entity, relation=None):
+	def format(self, rows, entity, relation=None, path='.'):
 		# FIXME: date-based output path somehow?
 		if relation is not None:
-			filename = '%s_%s.tsv' % (entity, relation)
+			filename = '%s/%s_%s.tsv' % (path, entity, relation)
 		else:
-			filename = '%s.tsv' % (entity)
+			filename = '%s/%s.tsv' % (path, entity)
 		
 		if not os.path.isfile(filename):
 			f = codecs.open(filename, 'w', 'utf-8')
