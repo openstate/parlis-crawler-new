@@ -27,6 +27,7 @@ class ParlisCrawler(object):
         cache = ParlisFileCache('.', '')
         api = ParlisAPI('SOS', 'Open2012', cache)
         for current_date in get_dates(self.start_date, self.end_date):
+            current_end_date = current_date + datetime.timedelta(days=1)
             cache.date_str = str(current_date)
             entity_count = 0
             last_items_fetched = 250
@@ -42,8 +43,8 @@ class ParlisCrawler(object):
                     None,
                     entity_count,
                     self.attribute,
-                    self.start_date,
-                    self.end_date
+                    current_date,
+                    current_end_date
                 )
 
                 entity_properties, entities = ParlisParser(
