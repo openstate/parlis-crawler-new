@@ -4,7 +4,8 @@ import re
 import logging
 import codecs
 
-from .utils import tsv_escape
+from .utils import tsv_escape, makedirs
+
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,8 @@ class ParlisBaseFormatter(object):
 		
 class ParlisTSVFormatter(ParlisBaseFormatter):
 	def format(self, rows, entity, relation=None, path='.'):
-		# FIXME: date-based output path somehow?
+	    makedirs(path)
+
 		if relation is not None:
 			filename = '%s/%s_%s.tsv' % (path, entity, relation)
 		else:
