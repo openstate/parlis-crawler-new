@@ -41,7 +41,7 @@ class ParlisParser(object):
 
             subtree = entry.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
-            ):
+            )
 
             for item_prop in self.properties:
                 attribuut = subtree.find(
