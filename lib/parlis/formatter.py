@@ -37,7 +37,13 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
 
         for row in rows:
             logger.info('Formatting a row for SID : %s', row['SID'])
-            row_items = [tsv_escape(row[item_prop]) for item_prop in self.properties]
+            row_items = []
+            for item_prop in self.properties:
+                if row.has_key(item_prop):
+                    val = None
+                else:
+                    val = row[item_prop]
+                row_items.append(tsv_escape(val))
             f.write(u"\t".join(row_items) + "\n")
 
         f.close()
