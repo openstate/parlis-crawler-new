@@ -19,7 +19,7 @@ class ParlisParser(object):
             logger.exception("XML file for %s failed to parse" % (entity, ))
             self.tree = None
 
-        properties = tree.find(
+        properties = self.tree.find(
             './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
         )
         if properties is not None:
@@ -28,7 +28,7 @@ class ParlisParser(object):
             ))
 
     def parse(self, extra_attributes = {}):
-        for entry in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if SID is None:
                 continue
