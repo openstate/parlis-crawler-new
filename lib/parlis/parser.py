@@ -21,6 +21,9 @@ class ParlisParser(object):
             logger.exception("XML file for %s failed to parse" % (entity, ))
             self.tree = None
 
+        if self.tree is None:
+            return
+
         if relation is not None:
             property_entity = relation
         else:
@@ -39,6 +42,9 @@ class ParlisParser(object):
             self.properties = parsed_properties
 
     def parse(self, extra_attributes = {}):
+        if self.tree is None:
+            return ([], [])
+
         for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if SID is None:
