@@ -15,7 +15,7 @@ class ParlisAPI(object):
     base_url = 'https://api.tweedekamer.nl/APIDataService/v1'
     cache = None
 
-    def __init__(self, username, passwd, cache=None):
+    def __init__(self, username, password, cache=None):
         self.username = username
         self.password = password
         self.cache = cache

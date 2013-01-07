@@ -1,7 +1,10 @@
 import os
 import codecs
+import logging
 
 from .utils import make_md5, makedirs
+
+logger = logging.getLogger(__name__)
 
 class ParlisBaseCache(object):
     def hit(self, entity, relation, url, params={}):
@@ -52,8 +55,11 @@ class ParlisFileCache(ParlisBaseCache):
                 str(params['$skip'])
             )
 
+        return path
+
     def hit(self, entity, relation, url, params={}):
         dirs = self._get_dirs(entity, relation, url, params)
+        logger.info('Got directory name : %s', dirs)
         path = self._get_filename(dirs, url, params)
         logger.info('Checking for filename : %s', path)
         return os.path.isfile(path)

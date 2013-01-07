@@ -35,6 +35,6 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
 
 		for row in rows:
 			row_items = [tsv_escape(row[item_prop]) for item_prop in self.properties]
-			f.write(u"\t".join(row_items) + "\n"
+			f.write(u"\t".join(row_items) + "\n")
 
 		f.close()

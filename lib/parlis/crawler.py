@@ -28,58 +28,58 @@ class ParlisCrawler(object):
         api = ParlisAPI('SOS', 'Open2012', cache)
         for current_date in get_dates(self.start_date, self.end_date):
             cache.date_str = str(current_date)
-			entity_count = 0
-			last_items_fetched = 250
+            entity_count = 0
+            last_items_fetched = 250
 
-			while (last_items_fetched >= 250):
-				logger.info(
-				    'Going to fetch data for %s, filtered by %s on %s, skipping %s items',
-				    self.entity, self.attribute, current_date, entity_count
-				)
+            while (last_items_fetched >= 250):
+                logger.info(
+                    'Going to fetch data for %s, filtered by %s on %s, skipping %s items',
+                    self.entity, self.attribute, current_date, entity_count
+                )
 
-				contents = api.fetch_recent(
-				    self.entity,
-				    None,
-				    entity_count,
-				    self.attribute,
-				    self.start_date,
-				    self.end_date
-				)
+                contents = api.fetch_recent(
+                    self.entity,
+                    None,
+                    entity_count,
+                    self.attribute,
+                    self.start_date,
+                    self.end_date
+                )
 
-				entity_properties, entities = ParlisParser(
-				    contents, self.entity, None
-				).parse()
+                entity_properties, entities = ParlisParser(
+                    contents, self.entity, None
+                ).parse()
 
-				ParlisTSVFormatter(entity_properties).format(
-				    entities,
-				    self.entity,
-				    None,
-				    'output/%s' % (current_date, )
-				)
+                ParlisTSVFormatter(entity_properties).format(
+                    entities,
+                    self.entity,
+                    None,
+                    'output/%s' % (current_date, )
+                )
 
-				last_items_fetched = len(entities)
-				entity_count += last_items_fetched
+                last_items_fetched = len(entities)
+                entity_count += last_items_fetched
 
-				# fetch the subtree, if necessary
-				subtree_parser = ParlisSubtreeParser()
-				urls = subtree_parser.parse(self.entity, contents)
+                # fetch the subtree, if necessary
+                subtree_parser = ParlisSubtreeParser()
+                urls = subtree_parser.parse(self.entity, contents)
 
-				for SID in urls:
-				    relation = urls[SID][0]
-				    relation_url = urls[SID][1]
-					relation_contents = api.get_request(
-					    relation_url, {}, self.entity, relation
-					)
+                for SID in urls:
+                    relation = urls[SID][0]
+                    relation_url = urls[SID][1]
+                    relation_contents = api.get_request(
+                        relation_url, {}, self.entity, relation
+                    )
 
                     parent_name = 'SID_%s' % (self.entity, )
-					relation_properties, relation_entities = ParlisParser(
-					    relation_contents, self.entity, relation, [parent_name]
-					).parse({parent_name: SID})
+                    relation_properties, relation_entities = ParlisParser(
+                        relation_contents, self.entity, relation, [parent_name]
+                    ).parse({parent_name: SID})
 
-					ParlisTSVFormatter(relation_properties).format(
-					    relation_entities,
-					    self.entity,
-					    relation,
-					    'output/%s' % (current_date, )
-					)
+                    ParlisTSVFormatter(relation_properties).format(
+                        relation_entities,
+                        self.entity,
+                        relation,
+                        'output/%s' % (current_date, )
+                    )
 
