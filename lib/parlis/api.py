@@ -15,6 +15,7 @@ class ParlisAPI(object):
     # no slash at the end!
     base_url = 'https://api.tweedekamer.nl/APIDataService/v1'
     cache = None
+    num_requests = 0
 
     def __init__(self, username, password, cache=None):
         self.username = username
@@ -48,6 +49,8 @@ class ParlisAPI(object):
 
             if self.cache is not None:
                 self.cache.store(result, entity, relation, result.url, params)
+
+            num_requests += 1
 
             contents = result.text
         else:

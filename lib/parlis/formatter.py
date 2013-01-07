@@ -39,7 +39,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             logger.info('Formatting a row for SID : %s', row['SID'])
             row_items = []
             for item_prop in self.properties:
-                if row.has_key(item_prop):
+                if not row.has_key(item_prop):
                     val = None
                 else:
                     val = row[item_prop]

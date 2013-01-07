@@ -26,6 +26,7 @@ class ParlisCrawler(object):
     def run(self):
         cache = ParlisFileCache('.', '')
         api = ParlisAPI('SOS', 'Open2012', cache)
+
         for current_date in get_dates(self.start_date, self.end_date):
             current_end_date = current_date + datetime.timedelta(days=1)
             cache.date_str = str(current_date)
@@ -69,6 +70,8 @@ class ParlisCrawler(object):
                 for SID in urls:
                     relation = urls[SID][0]
                     relation_url = urls[SID][1]
+
+                    # FIXME: only get subtree items that have changed on this date?
                     relation_contents = api.get_request(
                         relation_url, {}, self.entity, relation
                     )
@@ -84,4 +87,6 @@ class ParlisCrawler(object):
                         relation,
                         'output/%s' % (current_date, )
                     )
+
+        logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
