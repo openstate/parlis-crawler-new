@@ -28,6 +28,10 @@ class ParlisAPI(object):
         if not is_hit:
             real_url = '%s?' % (url, )
 
+            # for some reason either the requests params parsing is too lenient,
+            # (the requests params encding transforms $ into %24 and a space to +)
+            # or the parlis param checking is too weak. Probably the latter, so
+            # assemble url ourselves.
             if params.has_key('$filter'):
                 real_url = real_url + '$filter=%s&' % (urllib.quote(params['$filter']), )
             if params.has_key('$skip'):

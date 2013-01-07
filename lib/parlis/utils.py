@@ -27,4 +27,7 @@ def get_dates(from_date, end_date):
         from_date = from_date + datetime.timedelta(days=1)
 
 def tsv_escape(text):
-	return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
+    if text is not None:
+	    return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
+	else:
+	    return u''
