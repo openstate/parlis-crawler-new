@@ -48,7 +48,7 @@ class ParlisSubtreeParser(object):
 
         tree = etree.fromstring(contents)
 
-        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+        for entry in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
             base_url = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if base_url is None:
                 continue
