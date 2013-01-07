@@ -56,6 +56,10 @@ class ParlisSubtreeParser(object):
         ):
             base_url = elem.text
             SID = elem.text.split('/')[-1]
+
+            if self.entity is None or (not self.subtree_filters.has_key(self.entity)):
+                continue
+
             for relation in self.subtree_filters[self.entity]:
                 urls[SID] = (relation, u'%s/%s' % (base_url, relation))
 
