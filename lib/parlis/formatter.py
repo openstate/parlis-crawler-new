@@ -36,6 +36,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             f = codecs.open(filename, 'a', 'utf-8')
 
         for row in rows:
+            logger.info('Formatting a row for SID : %s', row['SID'])
             row_items = [tsv_escape(row[item_prop]) for item_prop in self.properties]
             f.write(u"\t".join(row_items) + "\n")
 
