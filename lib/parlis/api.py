@@ -39,7 +39,7 @@ class ParlisAPI(object):
 
             logger.info('Now fetching URL : %s', real_url)
             result = requests.get(
-                url,
+                real_url,
             #    params=params,
                 verify=False,
                 auth=(self.username, self.password)

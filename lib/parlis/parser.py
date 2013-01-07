@@ -34,7 +34,6 @@ class ParlisParser(object):
                 continue
 
             SID = SID.text.split('\'')[1]
-            logger.info('Parsing, found SID %s', SID)
 
             row = extra_attributes
             row['SID'] = SID
