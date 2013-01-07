@@ -40,7 +40,7 @@ class ParlisAPI(object):
         else:
             contents = self.cache.load(entity, relation, url, params)
 
-        return contents
+        return "\n".join(contents.split("\n")[1:])
 
     def post_request(self, url, params={}, data={}, entity=None, relation=None):
         pass

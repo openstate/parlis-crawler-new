@@ -14,8 +14,7 @@ class ParlisParser(object):
 
     def __init__(self, contents, entity, relation = None, extra_properties = []):
         try:
-            parser = etree.XMLParser(ns_clean=True, recover=True)
-            self.tree = etree.fromstring(contents, parser)
+            self.tree = etree.fromstring(contents)
         except etree.XMLSyntaxError, e:
             logger.exception("XML file for %s failed to parse" % (entity, ))
             self.tree = None
