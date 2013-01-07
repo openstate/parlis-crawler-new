@@ -32,6 +32,7 @@ class ParlisAPI(object):
                 verify=False,
                 auth=(self.username, self.password)
             )
+            logger.info('Fetched URL : %s', result.url)
 
             if self.cache is not None:
                 self.cache.store(result, entity, relation, url, params)
