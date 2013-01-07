@@ -28,12 +28,13 @@ class ParlisParser(object):
             ))
 
     def parse(self, extra_attributes = {}):
-        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+        for entry in self.tree.iterfind('//{http://www.w3.org/2005/Atom}entry'):
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if SID is None:
                 continue
 
             SID = SID.text.split('\'')[1]
+            logger.info('Parsing, found SID %s', SID)
 
             for subtree in entry.iterfind(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
