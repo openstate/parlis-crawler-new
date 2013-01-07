@@ -56,7 +56,7 @@ class ParlisSubtreeParser(object):
             SID = base_url.text.split('\'')[1]
             logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 
-            for relation in self.subtree_filters[self.entity]:
+            for relation in self.subtree_filters[entity]:
                 urls[SID] = (relation, u'%s/%s' % (base_url, relation))
 
         return urls
