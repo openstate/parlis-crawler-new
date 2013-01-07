@@ -49,10 +49,11 @@ class ParlisSubtreeParser(object):
         tree = etree.fromstring(contents)
 
         for entry in tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
-            base_url = entry.find('.//{http://www.w3.org/2005/Atom}id')
-            if base_url is None:
+            base = entry.find('.//{http://www.w3.org/2005/Atom}id')
+            if base is None:
                 continue
 
+            base_url = base.text
             SID = base_url.text.split('\'')[1]
             logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 
