@@ -67,9 +67,9 @@ class ParlisCrawler(object):
                 subtree_parser = ParlisSubtreeParser()
                 urls = subtree_parser.parse(self.entity, contents)
 
-                for SID in urls:
-                    relation = urls[SID][0]
-                    relation_url = urls[SID][1]
+                for SID, relation in urls:
+                    #relation = urls[SID][0]
+                    relation_url = urls[(SID, relation)][0]
 
                     # FIXME: only get subtree items that have changed on this date?
                     relation_contents = api.get_request(

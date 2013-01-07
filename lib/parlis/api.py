@@ -50,7 +50,7 @@ class ParlisAPI(object):
             if self.cache is not None:
                 self.cache.store(result, entity, relation, result.url, params)
 
-            num_requests += 1
+            self.num_requests += 1
 
             contents = result.text
         else:
