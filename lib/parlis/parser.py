@@ -12,6 +12,8 @@ class ParlisParser(object):
     data = []
     tree = None
 
+    entity_properties = []
+
     def __init__(self, contents, entity, relation = None, extra_properties = []):
         try:
             self.tree = etree.fromstring(contents)
@@ -19,13 +21,23 @@ class ParlisParser(object):
             logger.exception("XML file for %s failed to parse" % (entity, ))
             self.tree = None
 
-        properties = self.tree.find(
-            './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
-        )
-        if properties is not None:
-            self.properties = list(set(
-                extra_properties + [x.tag.split('}')[1] for x in properties.getchildren()]
-            ))
+        if relation is not None:
+            property_entity = relation
+        else:
+            property_entity = entity
+
+        if self.entity_properties.has_key(property_entity):
+            self.properties = self.entity_properties(property_entity)
+        else:
+            properties_set = self.tree.iterfind(
+                './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
+            )
+            if properties is not None:
+                parsed_properties = []
+                for property_set in properties_set:
+                    current_properties = [x.tag.split('}')[1] for x in property_set.getchildren()]
+                    parsed_properties  = list(set(parsed_properties + current_properties))
+                self.properties = parsed_properties
 
     def parse(self, extra_attributes = {}):
         for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
