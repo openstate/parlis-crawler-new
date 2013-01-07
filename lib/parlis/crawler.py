@@ -57,7 +57,8 @@ class ParlisCrawler(object):
                     'output/%s' % (current_date, )
                 )
 
-                last_items_fetched = len(entities)
+                # last_items_fetched = len(entities)
+                last_items_fetched = contents.count('<entry>')
                 entity_count += last_items_fetched
 
                 # fetch the subtree, if necessary
