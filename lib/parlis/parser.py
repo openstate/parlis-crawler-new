@@ -3,6 +3,8 @@ import os
 import re
 import logging
 
+from lxml import etree
+
 logger = logging.getLogger(__name__)
 
 class ParlisParser(object):
