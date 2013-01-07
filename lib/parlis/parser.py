@@ -28,7 +28,7 @@ class ParlisParser(object):
             ))
 
     def parse(self, extra_attributes = {}):
-        for entry in self.tree.iterfind('//{http://www.w3.org/2005/Atom}entry'):
+        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if SID is None:
                 continue
