@@ -49,7 +49,9 @@ class ParlisSubtreeParser(object):
         if not self.subtree_filters.has_key(entity):
             return urls # if no filter was found, then no subtree parsing!
 
-        tree = etree.fromstring(contents)
+        parser = etree.XMLParser(ns_clean=True, recover=True)
+        tree = etree.fromstring(contents, parser)
+
         for elem in tree.iterfind(
             './/{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'
         ):
