@@ -11,9 +11,6 @@ logger = logging.getLogger(__name__)
 
 # subtree parser simply parses atom file, returns list of urls to fetch
 class ParlisSubtreeParser(object):
-    filename = None
-    entity = None
-
     subtree_filters = {
         'Zaken': [
             'ZaakActoren',
@@ -51,14 +48,13 @@ class ParlisSubtreeParser(object):
 
         tree = etree.fromstring(contents)
 
-        for elem in tree.iterfind(
-            './/{http://www.w3.org/2005/Atom}entry/{http://www.w3.org/2005/Atom}id'
-        ):
-            base_url = elem.text
-            SID = elem.text.split('/')[-1]
-
-            if self.entity is None or (not self.subtree_filters.has_key(self.entity)):
+        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+            base_url = entry.find('.//{http://www.w3.org/2005/Atom}id')
+            if base_url is None:
                 continue
+
+            SID = base_url.text.split('\'')[1]
+            logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 
             for relation in self.subtree_filters[self.entity]:
                 urls[SID] = (relation, u'%s/%s' % (base_url, relation))
