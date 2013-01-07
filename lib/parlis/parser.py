@@ -36,11 +36,12 @@ class ParlisParser(object):
             SID = SID.text.split('\'')[1]
             logger.info('Parsing, found SID %s', SID)
 
+            row = extra_attributes
+            row['SID'] = SID
+
             for subtree in entry.iterfind(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             ):
-                row = extra_attributes
-                row['SID'] = SID
 
                 for item_prop in self.properties:
                     attribuut = subtree.find(
@@ -51,6 +52,6 @@ class ParlisParser(object):
                     else:
                         row[item_prop] = None
 
-                self.data.append(row)
+            self.data.append(row)
 
         return (self.properties, self.data)
