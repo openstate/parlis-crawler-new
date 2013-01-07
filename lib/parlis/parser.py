@@ -39,18 +39,18 @@ class ParlisParser(object):
             row = extra_attributes
             row['SID'] = SID
 
-            for subtree in entry.find(
+            subtree = entry.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             ):
 
-                for item_prop in self.properties:
-                    attribuut = subtree.find(
-                        './/{http://schemas.microsoft.com/ado/2007/08/dataservices}' + item_prop
-                    )
-                    if attribuut is not None and attribuut.text is not None:
-                        row[item_prop] = attribuut.text
-                    else:
-                        row[item_prop] = None
+            for item_prop in self.properties:
+                attribuut = subtree.find(
+                    './/{http://schemas.microsoft.com/ado/2007/08/dataservices}' + item_prop
+                )
+                if attribuut is not None and attribuut.text is not None:
+                    row[item_prop] = attribuut.text
+                else:
+                    row[item_prop] = None
 
             self.data.append(row.copy())
 
