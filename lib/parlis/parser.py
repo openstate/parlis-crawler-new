@@ -52,6 +52,6 @@ class ParlisParser(object):
                     else:
                         row[item_prop] = None
 
-            self.data.append(row)
+            self.data.append(row.copy())
 
         return (self.properties, self.data)
