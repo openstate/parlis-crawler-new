@@ -31,7 +31,7 @@ class ParlisAPI(object):
             if params.has_key('$filter'):
                 real_url = real_url + '$filter=%s&' % (urllib.quote(params['$filter']), )
             if params.has_key('$skip'):
-                real_url = real_url + '$skip=%s' % (skip, )
+                real_url = real_url + '$skip=%s' % (params['$skip'], )
 
             logger.info('Now fetching URL : %s', real_url)
             result = requests.get(
