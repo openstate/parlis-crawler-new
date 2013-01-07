@@ -1,5 +1,6 @@
 import datetime
 import logging
+import urllib
 
 import requests
 
@@ -25,10 +26,17 @@ class ParlisAPI(object):
         contents = u''
 
         if not is_hit:
-            logger.info('Now fetching URL : %s', url)
+            real_url = '%s?' % (url, )
+
+            if params.has_key('$filter'):
+                real_url = real_url + '$filter=%s&' % (urllib.quote(params['$filter']), )
+            if params.has_key('$skip'):
+                real_url = real_url + '$skip=%s' % (skip, )
+
+            logger.info('Now fetching URL : %s', real_url)
             result = requests.get(
                 url,
-                params=params,
+            #    params=params,
                 verify=False,
                 auth=(self.username, self.password)
             )
