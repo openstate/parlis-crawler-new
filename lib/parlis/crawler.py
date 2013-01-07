@@ -69,7 +69,7 @@ class ParlisCrawler(object):
 
                 for SID, relation in urls:
                     #relation = urls[SID][0]
-                    relation_url = urls[(SID, relation)][0]
+                    relation_url = urls[(SID, relation)]
 
                     # FIXME: only get subtree items that have changed on this date?
                     relation_contents = api.get_request(
