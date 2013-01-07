@@ -28,6 +28,6 @@ def get_dates(from_date, end_date):
 
 def tsv_escape(text):
     if text is not None:
-	    return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
-	else:
-	    return u''
+        return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
+    else:
+        return u''
