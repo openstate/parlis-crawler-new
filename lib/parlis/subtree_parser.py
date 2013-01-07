@@ -46,11 +46,11 @@ class ParlisSubtreeParser(object):
         if not self.subtree_filters.has_key(entity):
             return urls # if no filter was found, then no subtree parsing!
 
-            try:
-                tree = etree.fromstring(contents)
-            except etree.XMLSyntaxError, e:
-                logger.exception("XML file for %s failed to parse the subtree" % (entity, ))
-                tree = None
+        try:
+            tree = etree.fromstring(contents)
+        except etree.XMLSyntaxError, e:
+            logger.exception("XML file for %s failed to parse the subtree" % (entity, ))
+            tree = None
 
         if tree is None:
             return []
