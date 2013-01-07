@@ -39,7 +39,7 @@ class ParlisParser(object):
             row = extra_attributes
             row['SID'] = SID
 
-            for subtree in entry.iterfind(
+            for subtree in entry.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             ):
 
