@@ -36,7 +36,7 @@ def main(argv=None):
     entity = 'Zaken'
     attribute = 'GewijzigdOp'
     start_date = datetime.datetime.now().date()
-    end_date = datetime.datetime.now().date()
+    end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
 
     if argv is None:
         argv = sys.argv
