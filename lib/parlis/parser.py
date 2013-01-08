@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 class ParlisParser(object):
     properties = []
-    data = []
     tree = None
 
     entity_properties = {}
@@ -43,7 +42,7 @@ class ParlisParser(object):
 
     def parse(self, extra_attributes = {}):
         # initialize on new parsing :P
-        self.data = []
+        data = []
 
         if self.tree is None:
             return ([], [])
@@ -72,6 +71,6 @@ class ParlisParser(object):
                 else:
                     row[item_prop] = None
 
-            self.data.append(row.copy())
+            data.append(row.copy())
 
-        return (self.properties, self.data)
+        return (self.properties, data)
