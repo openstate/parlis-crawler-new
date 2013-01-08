@@ -42,6 +42,9 @@ class ParlisParser(object):
             self.properties = parsed_properties
 
     def parse(self, extra_attributes = {}):
+        # initialize on new parsing :P
+        self.data = []
+
         if self.tree is None:
             return ([], [])
 
