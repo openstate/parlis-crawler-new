@@ -62,6 +62,7 @@ class ParlisCrawler(object):
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
                 entity_count += last_items_fetched
+                logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
