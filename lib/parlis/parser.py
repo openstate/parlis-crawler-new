@@ -40,6 +40,8 @@ class ParlisParser(object):
                 parsed_properties  = list(set(parsed_properties + current_properties))
             self.properties = parsed_properties
 
+        logger.info("Parsed properties for %s, found the following : %s", property_entity, u','.join(parsed_properties))
+
     def parse(self, extra_attributes = {}):
         # initialize on new parsing :P
         data = []
