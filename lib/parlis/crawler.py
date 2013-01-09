@@ -98,7 +98,7 @@ class ParlisCrawler(object):
                         file_list.append(file_name)
 
             compressor = ParlisZipCompressor()
-            compressor.compress('output/%s_%s.zip' % (current_date, entity), list(set(file_list))
+            compressor.compress('output/%s_%s.zip' % (current_date, entity), list(set(file_list)))
 
         logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
