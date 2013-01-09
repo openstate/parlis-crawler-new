@@ -22,6 +22,9 @@ class ParlisBaseFormatter(object):
         
 class ParlisTSVFormatter(ParlisBaseFormatter):
     def format(self, rows, entity, relation=None, path='.'):
+        if len(rows) <= 0:
+            return
+        
         makedirs(path)
 
         if relation is not None:
