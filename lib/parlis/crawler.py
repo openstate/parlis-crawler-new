@@ -59,7 +59,8 @@ class ParlisCrawler(object):
                     None,
                     'output/%s' % (current_date, )
                 )
-                file_list.append(file_name)
+                if file_name is not None:
+                    file_list.append(file_name)
 
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
@@ -92,7 +93,8 @@ class ParlisCrawler(object):
                         relation,
                         'output/%s' % (current_date, )
                     )
-                    file_list.append(file_name)
+                    if file_name is not None:
+                        file_list.append(file_name)
 
         logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
