@@ -57,9 +57,6 @@ class ParlisParser(object):
             SID = SID.text.split('\'')[1]
             logger.info("Parsing, found a new SID : %s", SID)
 
-            row = extra_attributes
-            row['SID'] = SID
-
             subtree = entry.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             )
@@ -72,6 +69,9 @@ class ParlisParser(object):
                     row[item_prop] = attribuut.text
                 else:
                     row[item_prop] = None
+
+            row = extra_attributes
+            row['SID'] = SID
 
             data.append(row.copy())
 
