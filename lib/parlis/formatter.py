@@ -50,3 +50,5 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             f.write(u"\t".join(row_items) + "\n")
 
         f.close()
+
+        return filename
