@@ -18,4 +18,4 @@ class ParlisZipCompressor(ParlisBaseCompressor):
 
         with ZipFile(file_name, 'w') as zip_file:
             for tsv_file in file_list:
-                zip_file.write(tsv_file)
+                zip_file.write(tsv_file, os.path.basename(tsv_file))
