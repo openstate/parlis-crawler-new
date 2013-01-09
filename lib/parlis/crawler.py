@@ -78,9 +78,11 @@ class ParlisCrawler(object):
                     )
 
                     parent_name = 'SID_%s' % (self.entity, )
+                    extra_attributes = {parent_name: SID}
+                    logger.info(extra_attributes)
                     relation_properties, relation_entities = ParlisParser(
                         relation_contents, self.entity, relation, [parent_name]
-                    ).parse({parent_name: SID})
+                    ).parse(extra_attributes)
 
                     ParlisTSVFormatter(relation_properties).format(
                         relation_entities,
