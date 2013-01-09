@@ -61,6 +61,8 @@ class ParlisParser(object):
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             )
 
+            row = {}
+
             for item_prop in self.properties:
                 attribuut = subtree.find(
                     './/{http://schemas.microsoft.com/ado/2007/08/dataservices}' + item_prop
@@ -70,7 +72,7 @@ class ParlisParser(object):
                 else:
                     row[item_prop] = None
 
-            row = extra_attributes
+            row += extra_attributes
             row['SID'] = SID
 
             data.append(row.copy())
