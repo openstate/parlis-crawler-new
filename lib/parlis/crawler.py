@@ -6,6 +6,7 @@ from .cache import ParlisFileCache
 from .subtree_parser import ParlisSubtreeParser
 from .parser import ParlisParser
 from .formatter import ParlisTSVFormatter
+from .compressor import ParlisZipCompressor
 from .utils import get_dates
 
 logger = logging.getLogger(__name__)
@@ -95,6 +96,9 @@ class ParlisCrawler(object):
                     )
                     if file_name is not None:
                         file_list.append(file_name)
+
+            compressor = ParlisZipCompressor()
+            compressor.compress('output/%s.zip' % (current_date, ), file_list)
 
         logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
