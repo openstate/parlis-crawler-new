@@ -72,7 +72,8 @@ class ParlisParser(object):
                 else:
                     row[item_prop] = None
 
-            row += extra_attributes
+            for attr in extra_attributes:
+                row[attr] = extra_attributes[attr]
             row['SID'] = SID
 
             data.append(row.copy())
