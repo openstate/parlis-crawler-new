@@ -32,6 +32,7 @@ class ParlisCrawler(object):
             cache.date_str = str(current_date)
             entity_count = 0
             last_items_fetched = 250
+            file_list = []
 
             while (last_items_fetched >= 250):
                 logger.info(
@@ -52,12 +53,13 @@ class ParlisCrawler(object):
                     contents, self.entity, None
                 ).parse()
 
-                ParlisTSVFormatter(entity_properties).format(
+                file_name = ParlisTSVFormatter(entity_properties).format(
                     entities,
                     self.entity,
                     None,
                     'output/%s' % (current_date, )
                 )
+                file_list.append(file_name)
 
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
@@ -84,12 +86,13 @@ class ParlisCrawler(object):
                         relation_contents, self.entity, relation, [parent_name]
                     ).parse(extra_attributes)
 
-                    ParlisTSVFormatter(relation_properties).format(
+                    file_name = ParlisTSVFormatter(relation_properties).format(
                         relation_entities,
                         self.entity,
                         relation,
                         'output/%s' % (current_date, )
                     )
+                    file_list.append(file_name)
 
         logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
