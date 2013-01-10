@@ -43,8 +43,8 @@ class ParlisSubtreeParser(object):
     def parse(self, entity, contents):
         urls = {} # hash of relation => url
 
-        if not self.subtree_filters.has_key(entity):
-            return urls # if no filter was found, then no subtree parsing!
+        #if not self.subtree_filters.has_key(entity):
+        #    return urls # if no filter was found, then no subtree parsing!
 
         try:
             tree = etree.fromstring(contents)
@@ -64,7 +64,15 @@ class ParlisSubtreeParser(object):
             SID = base_url.split('\'')[1]
             logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 
-            for relation in self.subtree_filters[entity]:
+            # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/ZaakActoren"
+            # type="application/atom+xml;type=feed" title="ZaakActoren" 
+            # href="Zaken(guid'aec25db9-e037-44a6-8ace-001e313952dd')/ZaakActoren" />
+            for link in entry.iterfind('.//{http://www.w3.org/2005/Atom}link'):
+                if not link.get('rel').startswith('http://schemas.microsoft.com/ado/2007/08/dataservices/related/'):
+                    continue
+                if not link.get('type') == u'application/atom+xml;type=feed':
+                    continue
+                relation = link.get('title')
                 urls[(SID, relation)] = u'%s/%s' % (base_url, relation)
 
         return urls
