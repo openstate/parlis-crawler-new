@@ -2,7 +2,7 @@ import datetime
 import logging
 
 from .api import ParlisAPI
-from .cache import ParlisFileCache
+from .cache import ParlisFileCache, ParlisForceFileCache
 from .subtree_parser import ParlisSubtreeParser
 from .parser import ParlisParser
 from .formatter import ParlisTSVFormatter
@@ -17,15 +17,21 @@ class ParlisCrawler(object):
     attribute = 'GewijzigdOp'
     start_date = None
     end_date = None
+    force = False
 
-    def __init__(self, entity='Zaken', attribute='GewijzigdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date()):
+    def __init__(self, entity='Zaken', attribute='GewijzigdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date(), force=False):
         self.entity = entity
         self.attribute = attribute
         self.start_date = start_date
         self.end_date = end_date
+        self.force = force
 
     def run(self):
-        cache = ParlisFileCache('.', '')
+        if self.force:
+            cache = ParlisForceFileCache('.', '')
+        else:
+            cache = ParlisFileCache('.', '')
+
         api = ParlisAPI('SOS', 'Open2012', cache)
 
         for current_date in get_dates(self.start_date, self.end_date):

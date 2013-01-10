@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../l
 import parlis
 
 help_message = '''
-Usage: crawer.py [-p <path>] [-a <attribute>] [-f <from_date>]
+Usage: crawer.py [-p <path>] [-a <attribute>] [-f <from_date>] [-t <till_date>] [-F]
 '''
 
 logging.basicConfig(level=logging.INFO)
@@ -38,12 +38,13 @@ def main(argv=None):
     start_date = datetime.datetime.now().date()
     #end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
     end_date = datetime.datetime.now().date()
+    force = False
 
     if argv is None:
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "he:a:f:t:v", ["help", "entity=", "attribute=", "from=", "till="])
+            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vF", ["help", "entity=", "attribute=", "from=", "till=", "force"])
         except getopt.error, msg:
             raise Usage(msg)
 
@@ -61,9 +62,11 @@ def main(argv=None):
                 start_date = datetime.datetime.strptime(value, '%Y-%m-%d').date()
             if option in ("-t", "--till"):
                 end_date = datetime.datetime.strptime(value, '%Y-%m-%d').date()
+            if option in ("-F", "--force"):
+                force = True
 
         parlis_crawler = parlis.ParlisCrawler(
-            entity, attribute, start_date, end_date
+            entity, attribute, start_date, end_date, force
         )
         parlis_crawler.run()
 
