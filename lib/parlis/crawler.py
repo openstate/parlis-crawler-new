@@ -7,7 +7,7 @@ from .subtree_parser import ParlisSubtreeParser
 from .parser import ParlisParser
 from .formatter import ParlisTSVFormatter
 from .compressor import ParlisZipCompressor
-from .utils import get_dates
+from .utils import get_dates, entity_to_singular
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ class ParlisCrawler(object):
                         file_list.append(file_name)
 
             compressor = ParlisZipCompressor()
-            compressor.compress('output/%s_%s.zip' % (current_date, self.entity), list(set(file_list)))
+            compressor.compress('output/%s-%s.zip' % (current_date, self.entity), list(set(file_list)))
 
         logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
 
