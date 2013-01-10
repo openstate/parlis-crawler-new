@@ -81,7 +81,7 @@ class ParlisCrawler(object):
                         relation_url, {}, self.entity, relation
                     )
 
-                    parent_name = 'SID_%s' % (self.entity, )
+                    parent_name = 'SID_%s' % (entity_to_singular(self.entity), )
                     extra_attributes = {parent_name: SID}
 
                     relation_properties, relation_entities = ParlisParser(

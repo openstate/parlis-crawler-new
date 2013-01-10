@@ -5,6 +5,26 @@ import errno
 import datetime
 import hashlib
 
+SINGULAR_ENTITIES = {
+    u'Activiteiten': u'Activiteit',
+    u'ActiviteitActoren': u'ActiviteitActor',
+    u'Agendapunten': u'Agendapunt',
+    u'AgendapuntActoren': u'AgendapuntActor',
+    u'Besluiten': u'Besluit',
+    u'DocumentActoren': u'DocumentActor',
+    u'Documenten': u'Document',
+    u'DocumentVersies': u'DocumentVersie',
+    u'KamerstukDossiers': u'KamerstukDossier',
+    u'Statussen': u'Status',
+    u'Stemmingen': u'Stemming',
+    u'ZaakActiviteitBesluitSoorten': u'ZaakActiviteitBesluitSoort',
+    u'ZaakActoren': u'ZaakActor',
+    u'Zaken': u'Zaak',
+    u'Reserveringen': u'Reservering',
+    u'Zalen': u'Zaal'
+}
+
+
 def date_to_parlis_str(date):
     return date.strftime('%Y-%m-%d')
 
@@ -31,3 +51,11 @@ def tsv_escape(text):
         return text.replace('\n', ' ').replace('\t', ' ').replace('\r', '')
     else:
         return u''
+
+def entity_to_singular(entity):
+    if SINGULAR_ENTITIES.has_key(entity):
+        return SINGULAR_ENTITIES[entity]
+    else:
+        return entity
+
+    return entity
