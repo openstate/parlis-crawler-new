@@ -11,40 +11,9 @@ logger = logging.getLogger(__name__)
 
 # subtree parser simply parses atom file, returns list of urls to fetch
 class ParlisSubtreeParser(object):
-    subtree_filters = {
-        'Zaken': [
-            'ZaakActoren',
-            'Statussen',
-            'KamerstukDossier',
-            'Documenten',
-            'Activiteiten',
-            'Besluiten',
-            'GerelateerdVanuit',
-            'GerelateerdNaar',
-            'HoofdOverig',
-            'GerelateerdOverig',
-            'VervangenVanuit',
-            'VervangenDoor',
-            'Agendapunten'
-        ],
-        'Activiteiten': [
-            'ActiviteitActoren',
-            'Agendapunten',
-            'Documenten',
-            'Zaken',
-            'VoortgezetVanuit',
-            'VoortgezetIn',
-            'VervangenVanuit',
-            'VervangenDoor',
-            'Reserveringen'
-        ]
-    }
 
     def parse(self, entity, contents):
         urls = {} # hash of relation => url
-
-        #if not self.subtree_filters.has_key(entity):
-        #    return urls # if no filter was found, then no subtree parsing!
 
         try:
             tree = etree.fromstring(contents)
