@@ -30,6 +30,7 @@ class ParlisSubtreeParser(object):
                 continue
 
             base_url = base.text
+            # FIXME: Reserveringen has a number, not a GUID with ' around them :/
             SID = base_url.split('\'')[1]
             logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 

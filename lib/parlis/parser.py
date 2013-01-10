@@ -54,6 +54,7 @@ class ParlisParser(object):
             if SID is None:
                 continue
 
+            # FIXME: Reserveringen has a number, not a GUID with ' around them :/
             SID = SID.text.split('\'')[1]
             logger.info("Parsing, found a new SID : %s", SID)
 
