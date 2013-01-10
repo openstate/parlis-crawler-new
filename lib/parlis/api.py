@@ -22,8 +22,12 @@ class ParlisAPI(object):
         self.password = password
         self.cache = cache
 
-    def get_request(self, url, params={}, entity=None, relation=None):
-        is_hit = (self.cache is not None) and self.cache.hit(entity, relation, url, params)
+    def get_request(self, url, params={}, entity=None, relation=None, force=False):
+        if force:
+            is_hit = False
+        else:
+            is_hit = (self.cache is not None) and self.cache.hit(entity, relation, url, params)
+
         contents = u''
 
         if not is_hit:
@@ -61,7 +65,7 @@ class ParlisAPI(object):
     def post_request(self, url, params={}, data={}, entity=None, relation=None):
         pass
 
-    def _fetch(self, entity, relation = None, skip=0, filter=None):
+    def _fetch(self, entity, relation = None, skip=0, filter=None, force=False):
         params = {
             '$skip': skip
         }
@@ -73,10 +77,11 @@ class ParlisAPI(object):
             '%s/%s/' % (self.base_url, entity),
             params=params,
             entity=entity,
-            relation=relation
+            relation=relation,
+            force=force
         )
 
-    def fetch_recent(self, entity, relation=None, skip=0, attribute='GewijzijgdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date()):
+    def fetch_recent(self, entity, relation=None, skip=0, attribute='GewijzijgdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date(), force=False):
         date_filter = "%s ge datetime'%s' and %s le datetime'%s'" % (
             attribute,
             date_to_parlis_str(start_date),
@@ -84,4 +89,4 @@ class ParlisAPI(object):
             date_to_parlis_str(end_date)
         )
 
-        return self._fetch(entity, relation, skip, date_filter)
+        return self._fetch(entity, relation, skip, date_filter, force)

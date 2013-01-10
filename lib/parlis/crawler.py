@@ -53,7 +53,8 @@ class ParlisCrawler(object):
                     entity_count,
                     self.attribute,
                     current_date,
-                    current_end_date
+                    current_end_date,
+                    True
                 )
 
                 entity_properties, entities = ParlisParser(
