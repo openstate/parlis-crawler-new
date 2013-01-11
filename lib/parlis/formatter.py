@@ -21,6 +21,107 @@ class ParlisBaseFormatter(object):
 
         
 class ParlisTSVFormatter(ParlisBaseFormatter):
+    fields = {
+        'Activiteiten': [
+            'Id',
+            'Nummer',
+            'Onderwerp',
+            'Soort',
+            'DatumSoort',
+            'Aanvangstijd',
+            'EindTijd',
+            'Locatie',
+            'Besloten',
+            'Status',
+            'Vergaderjaar',
+            'Kamer',
+            'Noot',
+            'AangemaaktOp',
+            'GewijzigdOp',
+            'VRSNummer',
+            'Voortouwnaam',
+            'Voortouwafkorting',
+            'Voortouwkortenaam'
+        ],
+        'ActiviteitActoren': [
+            'Id',
+            'Naam',
+            'Functie',
+            'Partij',
+            'Relatie',
+            'Spreektijd',
+            'Volgorde',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ],
+        'Agendapunten': [
+            'Id',
+            'Nummer',
+            'Onderwerp',
+            'Aanvangstijd',
+            'Eindtijd',
+            'Volgorde',
+            'Rubriek',
+            'Noot',
+            'Status',
+            'AangemaaktOp',
+            'GewijzigdOp'        
+        ],
+        'Besluiten': [
+            'Id',
+            'Soort',
+            'StemmingsSoort',
+            'VoorstelText',
+            'BesluitText',
+            'AangemaaktOp',
+            'GewijzigdOp',
+            'Opmerking',
+            'Status'
+        ],
+        'Documenten': [
+            'Id',
+            'DocumentNummer',
+            'Titel',
+            'Soort',
+            'Onderwerp',
+            'Datum',
+            'Volgnummer',
+            'Vergaderjaar',
+            'Kamer',
+            'AangemaaktOp',
+            'GewijzigdOp',
+            'Citeertitel',
+            'Alias',
+            'DatumRegistratie',
+            'DatumOntvangst',
+            'AanhangelNummer',
+            'KenmerkAfzender',
+            'ContentType'
+        ],
+        'Zaken': [
+            'Id',
+            'Nummer',
+            'Soort',
+            'Titel',
+            'CiteerTitel',
+            'Alias',
+            'Status',
+            'Onderwerp',
+            'DatumStart',
+            'Kamer',
+            'GrondslagVoorhang',
+            'Termijn',
+            'Vergaderjaar',
+            'Volgnummer',
+            'HuidigeBehandelStatus',
+            'Afgedaan',
+            'GrootProject',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ],
+        
+    }
+
     def format(self, rows, entity, relation=None, path='.'):
         if len(rows) <= 0:
             return None
@@ -38,10 +139,19 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
         else:
             f = codecs.open(filename, 'a', 'utf-8')
 
+        if relation is not None:
+            entity_field = relation
+        else:
+            entity_field = entity
+        if self.fields.has_key(entity_field):
+            properties = self.fields[entity_field]
+        else:
+            properties = self.properties
+
         for row in rows:
             logger.info('Formatting a row for SID : %s', row['SID'])
             row_items = []
-            for item_prop in self.properties:
+            for item_prop in properties:
                 if not row.has_key(item_prop):
                     val = None
                 else:
