@@ -60,7 +60,7 @@ def entity_to_singular(entity):
 
     return entity
 
-def extract_sid_from_url(url, entity, relation=None):
+def extract_sid_from_url(url):
     try:
         sid = url.split('\'')[1]
     except IndexError, e:
