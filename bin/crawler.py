@@ -55,7 +55,7 @@ def main(argv=None):
             if option in ("-h", "--help"):
                 raise Usage(help_message)
             if option in ("-e", "--entity"):
-                entity = value.capitalize()
+                entity = value #.capitalize()
             if option in ("-a", "--attribute"):
                 attribute = value
             if option in ("-f", "--from"):
