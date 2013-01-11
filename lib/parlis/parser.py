@@ -5,6 +5,8 @@ import logging
 
 from lxml import etree
 
+from .utils import extract_sid_from_url
+
 logger = logging.getLogger(__name__)
 
 class ParlisParser(object):
@@ -54,8 +56,7 @@ class ParlisParser(object):
             if SID is None:
                 continue
 
-            # FIXME: Reserveringen has a number, not a GUID with ' around them :/
-            SID = SID.text.split('\'')[1]
+            SID = extract_sid_from_url(SID.text)
             logger.info("Parsing, found a new SID : %s", SID)
 
             subtree = entry.find(

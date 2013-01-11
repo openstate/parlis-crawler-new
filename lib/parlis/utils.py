@@ -59,3 +59,10 @@ def entity_to_singular(entity):
         return entity
 
     return entity
+
+def extract_sid_from_url(url, entity, relation=None):
+    if entity == u'Reserveringen':
+        sid = url.split('(')[1]
+    else:
+        sid = url.split("'")[1]
+    return sid

@@ -4,7 +4,7 @@ import logging
 from lxml import etree
 import requests
 
-from .utils import date_to_parlis_str
+from .utils import date_to_parlis_str, extract_sid_from_url
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,8 @@ class ParlisSubtreeParser(object):
                 continue
 
             base_url = base.text
-            # FIXME: Reserveringen has a number, not a GUID with ' around them :/
-            SID = base_url.split('\'')[1]
+
+            SID = extract_sid_from_url(base_url)
             logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
 
             # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/ZaakActoren"
