@@ -38,7 +38,7 @@ class ParlisParser(object):
             )
             self.properties = [x.tag.split('}')[1] for x in property_set.getchildren()] + extra_properties
 
-        logger.info("Parsed properties for %s, found the following : %s", property_entity, u','.join(parsed_properties))
+        logger.info("Parsed properties for %s, found the following : %s", property_entity, u','.join(self.properties))
 
     def parse(self, extra_attributes = {}):
         # initialize on new parsing :P
