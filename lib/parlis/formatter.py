@@ -67,6 +67,17 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'AangemaaktOp',
             'GewijzigdOp'        
         ],
+        'AgendapuntActoren': [
+            'Id',
+            'AgendapuntId',
+            'Actor_SID',
+            'Relatie',
+            'ActorNaam',
+            'ActorFunctie',
+            'ActorPartij',
+            'AangemaaktOp',
+            'GewijzigdOp'        
+        ]
         'Besluiten': [
             'Id',
             'Soort',
@@ -98,6 +109,63 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'KenmerkAfzender',
             'ContentType'
         ],
+        'DocumentActoren': [
+            'Id',
+            'DocumentId',
+            'Naam',
+            'Functie',
+            'Partij',
+            'Relatie',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ],
+        'DocumentVersies': [
+            'Id',
+            'DocumentId',
+            'Status',
+            'Versienummer',
+            'Bestandsgrootte',
+            'Extensie',
+            'Datum',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ],
+        'KamerstukSossiers': [
+            'Id',
+            'Titel',
+            'CiteerTitel',
+            'Alias',
+            'Nummer',
+            'Toevoeging',
+            'HoogsteVolgnummer',
+            'Afgesloten',
+            'Kamer',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ]
+        'Statussen': [
+            'Id',
+            'ZaakId',
+            'BesluitId',
+            'Soort',
+            'Datum',
+            'AangemaaktOp',
+            'GewijzigdOp'
+        ],
+        'Stemmingen': [
+            'Id',
+            'Soort',
+            'FractieGrootte',
+            'FractieStemmen',
+            'ActorNaam',
+            'ActorPartij',
+            'Vergissing',
+            'AangemaaktOp',
+            'GewijzigdOp',
+            'SID_ActorLid',
+            'SID_ActorFractie',
+            'SID_Besluit'
+        ]
         'Zaken': [
             'Id',
             'Nummer',
@@ -119,7 +187,16 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'AangemaaktOp',
             'GewijzigdOp'
         ],
-        
+        'ZaakActoren': [
+            'Id',
+            'Naam',
+            'Functie',
+            'Partij',
+            'Relatie',
+            'AangemaaktOp',
+            'GewijzigdOp',
+            'ActorAbreviatedName'
+        ]
     }
 
     def format(self, rows, entity, relation=None, path='.'):
@@ -139,14 +216,14 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
         else:
             f = codecs.open(filename, 'a', 'utf-8')
 
-        if relation is not None:
-            entity_field = relation
-        else:
-            entity_field = entity
-        if self.fields.has_key(entity_field):
-            properties = self.fields[entity_field]
-        else:
-            properties = self.properties
+        #if relation is not None:
+        #    entity_field = relation
+        #else:
+        #    entity_field = entity
+        #if self.fields.has_key(entity_field):
+        #    properties = self.fields[entity_field]
+        #else:
+        properties = self.properties
 
         for row in rows:
             logger.info('Formatting a row for SID : %s', row['SID'])
