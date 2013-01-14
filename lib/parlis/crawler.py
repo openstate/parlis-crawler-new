@@ -96,7 +96,7 @@ class ParlisCrawler(object):
                     )
                     file_list.append(file_name)
                     with open(attachment_file, "wb") as att:
-                        att.write(response.content)
+                        att.write(response)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
