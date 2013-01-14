@@ -142,7 +142,7 @@ class ParlisCrawler(object):
                         file_list.append(file_name)
                     # add attachments
                     file_list = file_list + self._fetch_attachments(
-                        api, relation_contents, current_date, entity, relation
+                        api, relation_contents, current_date, self.entity, relation
                     )
                     
 
