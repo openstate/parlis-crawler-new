@@ -10,10 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 # subtree parser simply parses atom file, returns list of urls to fetch
-class ParlisSubtreeParser(object):
+class ParlisAttachmentParser(object):
 
     def parse(self, entity, contents):
         urls = {} # hash of relation => url
+
+        # only the Documenten entity has attachments
+        if entity != 'Documenten':
+            return {}
 
         try:
             tree = etree.fromstring(contents)
@@ -32,17 +36,16 @@ class ParlisSubtreeParser(object):
             base_url = base.text
 
             SID = extract_sid_from_url(base_url)
-            logger.info("Subtree parsing for %s, found a new SID : %s", entity, SID)
+            logger.info("Attachment parsing for %s, found a new SID : %s", entity, SID)
 
             # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/ZaakActoren"
             # type="application/atom+xml;type=feed" title="ZaakActoren" 
             # href="Zaken(guid'aec25db9-e037-44a6-8ace-001e313952dd')/ZaakActoren" />
             for link in entry.iterfind('.//{http://www.w3.org/2005/Atom}link'):
-                if not link.get('rel').startswith('http://schemas.microsoft.com/ado/2007/08/dataservices/related/'):
+                if not link.get('rel').startswith('edit-media'):
                     continue
-                if not link.get('type') == u'application/atom+xml;type=feed':
+                if not link.get('title') == u'Document':
                     continue
-                relation = link.get('title')
-                urls[(SID, relation)] = u'%s/%s' % (base_url, relation)
-
+                urls[SID] = u'https://api.tweedekamer.nl/APIDataService/v1/%s' % (link.get('href'))
+            
         return urls

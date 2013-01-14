@@ -4,10 +4,11 @@ import logging
 from .api import ParlisAPI
 from .cache import ParlisFileCache, ParlisForceFileCache
 from .subtree_parser import ParlisSubtreeParser
+from .attachment_parser import ParlisAttachmentParser
 from .parser import ParlisParser
 from .formatter import ParlisTSVFormatter
 from .compressor import ParlisZipCompressor
-from .utils import get_dates, entity_to_singular
+from .utils import get_dates, entity_to_singular, makedirs
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,27 @@ class ParlisCrawler(object):
                 last_items_fetched = contents.count('<entry>')
                 entity_count += last_items_fetched
                 logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
+
+                # fetch the attachments, if necessary
+                attachment_parse = ParlisAttachmentParser()
+                attachments = attachment_parser.parse(self.entity, contents)
+                if len(attaschments) > 0:
+                    makedirs('output/%s/%s/Attachments' % (
+                        current_date,
+                        self.entity, )
+                    )
+                for attachment_SID in attachments:
+                    attachment_url = attachments[attachment_SID]
+                    response = api.get_request(
+                        attachment_url, {}, self.entity, None
+                    )
+                    attachment_file = 'output/%s/%s/Attachments/%s' % (
+                        current_date,
+                        self.entity,
+                        attachment_SID
+                    )
+                    with open(attachment_file, "wb") as att:
+                        att.write(response.content)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
