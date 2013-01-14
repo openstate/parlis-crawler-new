@@ -19,7 +19,7 @@ class ParlisZipCompressor(ParlisBaseCompressor):
         with ZipFile(file_name, 'w', ZIP_DEFLATED) as zip_file:
             for tsv_file in file_list:
                 # ugly hack to make subdirs in zip :/
-                if tsv_filw.lower().find('attachment') >= 0:
+                if tsv_file.lower().find('attachment') >= 0:
                     zip_file.write(tsv_file, u'Attachments/%s' % (os.path.basename(tsv_file), ))
                 else:
                     zip_file.write(tsv_file, os.path.basename(tsv_file))
