@@ -77,7 +77,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'ActorPartij',
             'AangemaaktOp',
             'GewijzigdOp'        
-        ]
+        ],
         'Besluiten': [
             'Id',
             'Soort',
@@ -165,7 +165,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'SID_ActorLid',
             'SID_ActorFractie',
             'SID_Besluit'
-        ]
+        ],
         'Zaken': [
             'Id',
             'Nummer',
