@@ -142,7 +142,7 @@ class ParlisTSVFormatter(ParlisBaseFormatter):
             'Kamer',
             'AangemaaktOp',
             'GewijzigdOp'
-        ]
+        ],
         'Statussen': [
             'Id',
             'ZaakId',
