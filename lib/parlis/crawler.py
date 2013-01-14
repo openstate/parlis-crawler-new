@@ -94,7 +94,7 @@ class ParlisCrawler(object):
                         self.entity,
                         attachment_SID
                     )
-                    file_list.append(file_name)
+                    file_list.append(attachment_file)
                     with open(attachment_file, "wb") as att:
                         att.write(response.content)
 
