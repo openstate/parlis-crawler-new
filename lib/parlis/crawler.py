@@ -27,6 +27,38 @@ class ParlisCrawler(object):
         self.end_date = end_date
         self.force = force
 
+    def _fetch_attachments(self, contents, current_date, entity, relation=None):
+        file_list = []
+        # fetch the attachments, if necessary
+        attachment_parser = ParlisAttachmentParser()
+        if relation is not None:
+            entity_name = relation
+        else:
+            entity_name = entity
+
+        attachments = attachment_parser.parse(entity_name, contents)
+        if len(attachments) > 0:
+            makedirs('output/%s/%s/Attachments' % (
+                current_date,
+                entity_name, )
+            )
+
+        for attachment_SID in attachments:
+            attachment_url = attachments[attachment_SID]
+            response = api.get_request_response(
+                attachment_url, {}
+            )
+            attachment_file = 'output/%s/%s/Attachments/%s' % (
+                current_date,
+                entity_name,
+                attachment_SID
+            )
+            file_list.append(attachment_file)
+            with open(attachment_file, "wb") as att:
+                att.write(response.content)
+
+        return file_list
+
     def run(self):
         if self.force:
             cache = ParlisForceFileCache('.', '')
@@ -76,27 +108,7 @@ class ParlisCrawler(object):
                 entity_count += last_items_fetched
                 logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
-                # fetch the attachments, if necessary
-                attachment_parser = ParlisAttachmentParser()
-                attachments = attachment_parser.parse(self.entity, contents)
-                if len(attachments) > 0:
-                    makedirs('output/%s/%s/Attachments' % (
-                        current_date,
-                        self.entity, )
-                    )
-                for attachment_SID in attachments:
-                    attachment_url = attachments[attachment_SID]
-                    response = api.get_request_response(
-                        attachment_url, {}
-                    )
-                    attachment_file = 'output/%s/%s/Attachments/%s' % (
-                        current_date,
-                        self.entity,
-                        attachment_SID
-                    )
-                    file_list.append(attachment_file)
-                    with open(attachment_file, "wb") as att:
-                        att.write(response.content)
+                file_list = file_list + self._fetch_attachments(contents, current_date, entity)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
@@ -126,6 +138,11 @@ class ParlisCrawler(object):
                     )
                     if file_name is not None:
                         file_list.append(file_name)
+                    # add attachments
+                    file_list = file_list + self._fetch_attachments(
+                        relation_contents, current_date, entity, relation
+                    )
+                    
 
             compressor = ParlisZipCompressor()
             compressor.compress('output/%s-%s.zip' % (current_date, self.entity), list(set(file_list)))
