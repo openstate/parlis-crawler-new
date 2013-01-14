@@ -77,9 +77,9 @@ class ParlisCrawler(object):
                 logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
                 # fetch the attachments, if necessary
-                attachment_parse = ParlisAttachmentParser()
+                attachment_parser = ParlisAttachmentParser()
                 attachments = attachment_parser.parse(self.entity, contents)
-                if len(attaschments) > 0:
+                if len(attachments) > 0:
                     makedirs('output/%s/%s/Attachments' % (
                         current_date,
                         self.entity, )
