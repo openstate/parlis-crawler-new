@@ -27,7 +27,7 @@ class ParlisCrawler(object):
         self.end_date = end_date
         self.force = force
 
-    def _fetch_attachments(self, contents, current_date, entity, relation=None):
+    def _fetch_attachments(self, api, contents, current_date, entity, relation=None):
         file_list = []
         # fetch the attachments, if necessary
         attachment_parser = ParlisAttachmentParser()
@@ -108,7 +108,9 @@ class ParlisCrawler(object):
                 entity_count += last_items_fetched
                 logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
-                file_list = file_list + self._fetch_attachments(contents, current_date, self.entity)
+                file_list = file_list + self._fetch_attachments(
+                    api, contents, current_date, self.entity
+                )
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
@@ -140,7 +142,7 @@ class ParlisCrawler(object):
                         file_list.append(file_name)
                     # add attachments
                     file_list = file_list + self._fetch_attachments(
-                        relation_contents, current_date, entity, relation
+                        api, relation_contents, current_date, entity, relation
                     )
                     
 
