@@ -22,6 +22,31 @@ class ParlisAPI(object):
         self.password = password
         self.cache = cache
 
+    def get_request_response(self, url, params={}):
+        real_url = '%s?' % (url, )
+
+        # for some reason either the requests params parsing is too lenient,
+        # (the requests params encding transforms $ into %24 and a space to +)
+        # or the parlis param checking is too weak. Probably the latter, so
+        # assemble url ourselves.
+        if params.has_key('$filter'):
+            real_url = real_url + '$filter=%s&' % (urllib.quote(params['$filter']), )
+        if params.has_key('$skip'):
+            real_url = real_url + '$skip=%s' % (params['$skip'], )
+
+        logger.info('Now fetching URL : %s', real_url)
+        result = requests.get(
+            real_url,
+        #    params=params,
+            verify=False,
+            auth=(self.username, self.password)
+        )
+        logger.info('Fetched URL : %s', result.url)
+
+        self.num_requests += 1
+
+        return result
+
     def get_request(self, url, params={}, entity=None, relation=None, force=False):
         if force:
             is_hit = False
@@ -31,30 +56,9 @@ class ParlisAPI(object):
         contents = u''
 
         if not is_hit:
-            real_url = '%s?' % (url, )
-
-            # for some reason either the requests params parsing is too lenient,
-            # (the requests params encding transforms $ into %24 and a space to +)
-            # or the parlis param checking is too weak. Probably the latter, so
-            # assemble url ourselves.
-            if params.has_key('$filter'):
-                real_url = real_url + '$filter=%s&' % (urllib.quote(params['$filter']), )
-            if params.has_key('$skip'):
-                real_url = real_url + '$skip=%s' % (params['$skip'], )
-
-            logger.info('Now fetching URL : %s', real_url)
-            result = requests.get(
-                real_url,
-            #    params=params,
-                verify=False,
-                auth=(self.username, self.password)
-            )
-            logger.info('Fetched URL : %s', result.url)
-
+            result = self.get_request_response(url, params)
             if self.cache is not None:
                 self.cache.store(result, entity, relation, result.url, params)
-
-            self.num_requests += 1
 
             contents = result.text
         else:

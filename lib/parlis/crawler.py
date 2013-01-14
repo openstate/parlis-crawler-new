@@ -86,8 +86,8 @@ class ParlisCrawler(object):
                     )
                 for attachment_SID in attachments:
                     attachment_url = attachments[attachment_SID]
-                    response = api.get_request(
-                        attachment_url, {}, self.entity, None
+                    response = api.get_request_response(
+                        attachment_url, {}
                     )
                     attachment_file = 'output/%s/%s/Attachments/%s' % (
                         current_date,
@@ -96,7 +96,7 @@ class ParlisCrawler(object):
                     )
                     file_list.append(file_name)
                     with open(attachment_file, "wb") as att:
-                        att.write(response)
+                        att.write(response.content)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
