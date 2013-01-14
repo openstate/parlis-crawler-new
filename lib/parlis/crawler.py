@@ -108,7 +108,7 @@ class ParlisCrawler(object):
                 entity_count += last_items_fetched
                 logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
-                file_list = file_list + self._fetch_attachments(contents, current_date, entity)
+                file_list = file_list + self._fetch_attachments(contents, current_date, self.entity)
 
                 # fetch the subtree, if necessary
                 subtree_parser = ParlisSubtreeParser()
