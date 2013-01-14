@@ -36,7 +36,10 @@ class ParlisParser(object):
             property_set = self.tree.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
             )
-            self.properties = [x.tag.split('}')[1] for x in property_set.getchildren()] + extra_properties
+            if property_set is not None:
+                self.properties = [x.tag.split('}')[1] for x in property_set.getchildren()] + extra_properties
+            else:
+                self.properties = extra_properties
 
         logger.info("Parsed properties for %s, found the following : %s", property_entity, u','.join(self.properties))
 
