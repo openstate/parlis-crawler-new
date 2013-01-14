@@ -1,6 +1,11 @@
 #!/bin/sh
 
-cd ..
+PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
+PARLIS_HTDOCS_UPDATES=/mnt/projects/appsvoordemocratie/data/htdocs/updates
+PARLIS_VIRTUAL_ENV=parlis_new
+
+cd $PARLIS_CRAWLER_HOME
+workon $PARLIS_VIRTUAL_ENV
 
 # Zaken
 ./bin/crawler.py
@@ -15,7 +20,8 @@ cd ..
 # Reserveringen
 ./bin/crawler.py -e Reserveringen
 
-# FIXME: copy/move resulting zip (and tsv?) somewhere decent
+cd "$PARLIS_CRAWLER_HOME/output"
+find . -name '*.zip' -exec mv \{\} $PARLIS_HTDOCS_UPDATES \;
 
 cd -
 
