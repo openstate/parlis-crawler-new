@@ -39,12 +39,14 @@ def main(argv=None):
     #end_date = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
     end_date = datetime.datetime.now().date()
     force = False
+    fetch_all = False
 
     if argv is None:
         argv = sys.argv
+
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vF", ["help", "entity=", "attribute=", "from=", "till=", "force"])
+            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vFA", ["help", "entity=", "attribute=", "from=", "till=", "force", "all"])
         except getopt.error, msg:
             raise Usage(msg)
 
@@ -64,9 +66,11 @@ def main(argv=None):
                 end_date = datetime.datetime.strptime(value, '%Y-%m-%d').date()
             if option in ("-F", "--force"):
                 force = True
+            if option in ("-A", "--all"):
+                fetch_all = True
 
         parlis_crawler = parlis.ParlisCrawler(
-            entity, attribute, start_date, end_date, force
+            entity, attribute, start_date, end_date, force, fetch_all
         )
         parlis_crawler.run()
 
