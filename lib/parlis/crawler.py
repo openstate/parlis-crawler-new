@@ -38,24 +38,22 @@ class ParlisCrawler(object):
 
         attachments = attachment_parser.parse(entity_name, contents)
         if len(attachments) > 0:
-            makedirs('output/%s/%s/Attachments' % (
-                current_date,
-                entity_name, )
-            )
+            makedirs('output/Attachments')
 
         for attachment_SID in attachments:
             attachment_url = attachments[attachment_SID]
-            response = api.get_request_response(
-                attachment_url, {}
-            )
-            attachment_file = 'output/%s/%s/Attachments/%s' % (
-                current_date,
-                entity_name,
+            attachment_file = 'output/Attachments/%s' % (
                 attachment_SID
             )
+
+            if not os.path.exists(attachment_file):
+                response = api.get_request_response(
+                    attachment_url, {}
+                )
+                with open(attachment_file, "wb") as att:
+                    att.write(response.content)
+
             file_list.append(attachment_file)
-            with open(attachment_file, "wb") as att:
-                att.write(response.content)
 
         return file_list
 
