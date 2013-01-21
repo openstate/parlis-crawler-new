@@ -2,6 +2,8 @@ from collections import defaultdict
 import datetime
 import logging
 
+import iso8601
+
 from .api import ParlisAPI
 from .cache import ParlisFileCache, ParlisForceFileCache
 from .subtree_parser import ParlisSubtreeParser
@@ -9,7 +11,7 @@ from .attachment_parser import ParlisAttachmentParser
 from .parser import ParlisParser
 from .formatter import ParlisTSVFormatter
 from .compressor import ParlisZipCompressor
-from .utils import get_dates, entity_to_singular, makedirs
+from .utils import get_dates, entity_to_singular, makedirs, date_to_parlis_str
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +33,10 @@ class ParlisCrawler(object):
     def _format_entities(self, entity, entity_properties, entities, relation = None, output_dir='output', order_field='GewijzigdOp'):
         ordered_entities = defaultdict(list)
         for unordered_entity in entities:
-            sort_entry = unordered_entity[order_field]
+            if (order_field == u'GewijzigdOp') or (order_field == u'AangemaaktOp'):
+                sort_entry = date_to_parlis_str(iso8601.parse_date(unordered_entity[order_field]))
+            else:
+                sort_entry = unordered_entity[order_field]
             ordered_entities[sort_entry].append(unordered_entity)
 
         file_names = []
@@ -114,7 +119,9 @@ class ParlisCrawler(object):
                     contents, self.entity, None
                 ).parse()
 
-                file_list += self._format_entities(self.entity, entity_properties, entities, None, 'output', self.attribute)
+                file_list += self._format_entities(
+                    self.entity, entity_properties, entities, None, 'output', self.attribute
+                )
 
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
@@ -145,7 +152,9 @@ class ParlisCrawler(object):
                         relation_contents, self.entity, relation, [parent_name]
                     ).parse(extra_attributes)
 
-                    file_list += self._format_entities(self.entity, relation_properties, relation_entities, relation, 'output', self.attribute)
+                    file_list += self._format_entities(
+                        self.entity, relation_properties, relation_entities, relation, 'output', self.attribute
+                    )
                     
                     # add attachments
                     file_list = file_list + self._fetch_attachments(
