@@ -1,3 +1,4 @@
+from collections import defaultdict
 import datetime
 import logging
 
@@ -26,6 +27,25 @@ class ParlisCrawler(object):
         self.start_date = start_date
         self.end_date = end_date
         self.force = force
+
+    def _format_entities(self, entity, entity_properties, entities, relation = None, output_dir='output', order_field='GewijzigdOp'):
+        ordered_entities = defaultdict(list)
+        for unordered_entity in entities:
+            sort_entry = unordered_entity[order_field]
+            ordered_entities[sort_entry].append(unordered_entity)
+
+        file_names = []
+        for entry in sorted(ordered_entities.keys()):
+            file_name = ParlisTSVFormatter(entity_properties).format(
+                ordered_entities[entry],
+                entity,
+                relation,
+                '%s/%s' % (output_dir, entry, )
+            )
+            if file_name is not None:
+                file_names.append(file_name)
+
+        return file_names
 
     def _fetch_attachments(self, api, contents, current_date, entity, relation=None):
         file_list = []
@@ -94,14 +114,7 @@ class ParlisCrawler(object):
                     contents, self.entity, None
                 ).parse()
 
-                file_name = ParlisTSVFormatter(entity_properties).format(
-                    entities,
-                    self.entity,
-                    None,
-                    'output/%s' % (current_date, )
-                )
-                if file_name is not None:
-                    file_list.append(file_name)
+                file_list += self._format_entities(self.entity, entity_properties, entities, None, 'output', self.attribute)
 
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
@@ -132,14 +145,8 @@ class ParlisCrawler(object):
                         relation_contents, self.entity, relation, [parent_name]
                     ).parse(extra_attributes)
 
-                    file_name = ParlisTSVFormatter(relation_properties).format(
-                        relation_entities,
-                        self.entity,
-                        relation,
-                        'output/%s' % (current_date, )
-                    )
-                    if file_name is not None:
-                        file_list.append(file_name)
+                    file_list += self._format_entities(self.entity, relation_properties, relation_entities, relation, 'output', self.attribute)
+                    
                     # add attachments
                     file_list = file_list + self._fetch_attachments(
                         api, relation_contents, current_date, self.entity, relation
