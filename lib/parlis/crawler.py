@@ -95,7 +95,7 @@ class ParlisCrawler(object):
         #for current_date in get_dates(self.start_date, self.end_date):
         for current_date in [self.start_date]:
             #current_end_date = current_date + datetime.timedelta(days=1)
-            current_end_date = self.end_date
+            current_end_date = self.end_date + datetime.timedelta(days=1)
             cache.date_str = str(current_date)
             entity_count = 0
             last_items_fetched = 250
