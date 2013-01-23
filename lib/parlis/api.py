@@ -80,6 +80,7 @@ class ParlisAPI(object):
         }
 
         if filter is not None:
+            logger.info('Filter : %s', filter)
             params['$filter'] = filter
 
         return self.get_request(
