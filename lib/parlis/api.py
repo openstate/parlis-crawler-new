@@ -16,11 +16,13 @@ class ParlisAPI(object):
     base_url = 'https://api.tweedekamer.nl/APIDataService/v1'
     cache = None
     num_requests = 0
+    fake = False
 
-    def __init__(self, username, password, cache=None):
+    def __init__(self, username, password, cache=None, fake=False):
         self.username = username
         self.password = password
         self.cache = cache
+        self.fake = fake
 
     def get_request_response(self, url, params={}):
         real_url = '%s?' % (url, )
@@ -56,11 +58,14 @@ class ParlisAPI(object):
         contents = u''
 
         if not is_hit:
-            result = self.get_request_response(url, params)
-            if self.cache is not None:
-                self.cache.store(result, entity, relation, result.url, params)
+            if not self.fake:
+                result = self.get_request_response(url, params)
+                if self.cache is not None:
+                    self.cache.store(result, entity, relation, result.url, params)
 
-            contents = result.text
+                contents = result.text
+            else:
+                contents = u''
         else:
             contents = self.cache.load(entity, relation, url, params)
 
