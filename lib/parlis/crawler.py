@@ -91,7 +91,7 @@ class ParlisCrawler(object):
         else:
             cache = ParlisFileCache('.', '')
 
-        api = ParlisAPI('SOS', 'Open2012', cache, True)
+        api = ParlisAPI('SOS', 'Open2012', cache)
 
         #for current_date in get_dates(self.start_date, self.end_date):
         for current_date in [self.start_date]:
