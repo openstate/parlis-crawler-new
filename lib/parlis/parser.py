@@ -56,7 +56,7 @@ class ParlisParser(object):
                 continue
 
             SID = extract_sid_from_url(SID.text)
-            logger.info("Parsing, found a new SID : %s", SID)
+            logger.debug("Parsing, found a new SID : %s", SID)
 
             subtree = entry.find(
                 './/{http://schemas.microsoft.com/ado/2007/08/dataservices/metadata}properties'
