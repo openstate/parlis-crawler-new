@@ -36,14 +36,14 @@ class ParlisAPI(object):
         if params.has_key('$skip'):
             real_url = real_url + '$skip=%s' % (params['$skip'], )
 
-        logger.debug('Now fetching URL : %s', real_url)
+        logger.info('%s', real_url)
         result = requests.get(
             real_url,
         #    params=params,
             verify=False,
             auth=(self.username, self.password)
         )
-        logger.info(' %s', result.url)
+        logger.debug(' %s', result.url)
 
         self.num_requests += 1
 

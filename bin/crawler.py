@@ -38,6 +38,7 @@ def main(argv=None):
     end_date = datetime.datetime.now().date()
     force = False
     fetch_all = False
+    numeric_level = logging.INFO
 
     if argv is None:
         argv = sys.argv
@@ -70,8 +71,8 @@ def main(argv=None):
                 numeric_level = getattr(logging, value.upper(), None)
                 if not isinstance(numeric_level, int):
                     raise ValueError('Invalid log level: %s' % value)
-                logging.basicConfig(level=numeric_level)
 
+        logging.basicConfig(level=numeric_level)
         logger.debug('Starting up ...')
         parlis_crawler = parlis.ParlisCrawler(
             entity, attribute, start_date, end_date, force, fetch_all
