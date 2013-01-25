@@ -21,7 +21,7 @@ help_message = '''
 Usage: crawer.py [-p <path>] [-a <attribute>] [-f <from_date>] [-t <till_date>] [-F]
 '''
 
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class Usage(Exception):
@@ -30,8 +30,6 @@ class Usage(Exception):
 
 
 def main(argv=None):
-    logger.debug('Starting up ...')
-
     verbose = False
     entity = 'Zaken'
     attribute = 'GewijzigdOp'
@@ -46,7 +44,7 @@ def main(argv=None):
 
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vFA", ["help", "entity=", "attribute=", "from=", "till=", "force", "all", "log"])
+            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vFA", ["help", "entity=", "attribute=", "from=", "till=", "force", "all", "log="])
         except getopt.error, msg:
             raise Usage(msg)
 
@@ -69,11 +67,12 @@ def main(argv=None):
             if option in ("-A", "--all"):
                 fetch_all = True
             if option in ("--log"):
-                numeric_level = getattr(logging, loglevel.upper(), None)
+                numeric_level = getattr(logging, value.upper(), None)
                 if not isinstance(numeric_level, int):
-                    raise ValueError('Invalid log level: %s' % loglevel)
+                    raise ValueError('Invalid log level: %s' % value)
                 logging.basicConfig(level=numeric_level)
 
+        logger.debug('Starting up ...')
         parlis_crawler = parlis.ParlisCrawler(
             entity, attribute, start_date, end_date, force, fetch_all
         )
