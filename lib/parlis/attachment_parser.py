@@ -36,7 +36,7 @@ class ParlisAttachmentParser(object):
             base_url = base.text
 
             SID = extract_sid_from_url(base_url)
-            logger.info("Attachment parsing for %s, found a new SID : %s", entity, SID)
+            logger.debug("Attachment parsing for %s, found a new SID : %s", entity, SID)
 
             # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/ZaakActoren"
             # type="application/atom+xml;type=feed" title="ZaakActoren" 

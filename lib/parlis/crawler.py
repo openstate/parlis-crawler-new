@@ -104,7 +104,7 @@ class ParlisCrawler(object):
             file_list = []
 
             while (last_items_fetched >= 250):
-                logger.info(
+                logger.debug(
                     'Going to fetch data for %s, filtered by %s on %s, skipping %s items',
                     self.entity, self.attribute, current_date, entity_count
                 )
@@ -138,7 +138,7 @@ class ParlisCrawler(object):
                 # last_items_fetched = len(entities)
                 last_items_fetched = contents.count('<entry>')
                 entity_count += last_items_fetched
-                logging.info("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
+                logging.debug("Parsed %s items, skipped %s items", last_items_fetched, entity_count)
 
                 file_list = file_list + self._fetch_attachments(
                     api, contents, current_date, self.entity
@@ -177,5 +177,5 @@ class ParlisCrawler(object):
             compressor = ParlisZipCompressor()
             compressor.compress('output/%s-%s.zip' % (current_date, self.entity), list(set(file_list)))
 
-        logger.info('Crawling ended, fetched %s urls ..', api.num_requests)
+        logger.debug('Crawling ended, fetched %s urls ..', api.num_requests)
 

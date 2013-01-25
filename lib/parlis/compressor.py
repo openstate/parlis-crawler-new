@@ -14,7 +14,7 @@ class ParlisBaseCompressor(object):
 
 class ParlisZipCompressor(ParlisBaseCompressor):
     def compress(self, file_name, file_list):
-        logger.info("Compressing %s (%s)", file_name, file_list)
+        logger.debug("Compressing %s (%s)", file_name, file_list)
 
         with ZipFile(file_name, 'w', ZIP_DEFLATED) as zip_file:
             for tsv_file in file_list:

@@ -59,16 +59,16 @@ class ParlisFileCache(ParlisBaseCache):
 
     def hit(self, entity, relation, url, params={}):
         dirs = self._get_dirs(entity, relation, url, params)
-        logger.info('Got directory name : %s', dirs)
+        logger.debug('Got directory name : %s', dirs)
         path = self._get_filename(dirs, url, params)
-        logger.info('Checking for filename : %s', path)
+        logger.debug('Checking for filename : %s', path)
         return os.path.isfile(path)
 
     def load(self, entity, relation, url, params={}):
         dirs = self._get_dirs(entity, relation, url, params)
         path = self._get_filename(dirs, url, params)
         
-        logger.info('Now reading from cache file: %s', path)
+        logger.debug('Now reading from cache file: %s', path)
         f = codecs.open(path, 'r', 'utf-8')
         text = f.read()
         f.close()
@@ -82,7 +82,7 @@ class ParlisFileCache(ParlisBaseCache):
 
         path = self._get_filename(dirs, url, params)
 
-        logger.info('Now storing into cache file: %s', path)
+        logger.debug('Now storing into cache file: %s', path)
         f = codecs.open(path, 'w', 'utf-8')
         f.write(result.text)
         f.close()
