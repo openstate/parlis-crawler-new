@@ -34,21 +34,13 @@ class ParlisCrawler(object):
         self.fetch_all = fetch_all
 
     def _format_entities(self, entity, entity_properties, entities, relation = None, output_dir='output', order_field='GewijzigdOp'):
-        ordered_entities = defaultdict(list)
-        for unordered_entity in entities:
-            if (order_field == u'GewijzigdOp') or (order_field == u'AangemaaktOp'):
-                sort_entry = date_to_parlis_str(iso8601.parse_date(unordered_entity[order_field]))
-            else:
-                sort_entry = unordered_entity[order_field]
-            ordered_entities[sort_entry].append(unordered_entity)
-
         file_names = []
         for entry in sorted(ordered_entities.keys()):
             file_name = ParlisTSVFormatter(entity_properties).format(
-                ordered_entities[entry],
+                entities,
                 entity,
                 relation,
-                '%s/%s' % (output_dir, entry, )
+                output_dir
             )
             if file_name is not None:
                 file_names.append(file_name)
@@ -102,6 +94,7 @@ class ParlisCrawler(object):
             entity_count = 0
             last_items_fetched = 250
             file_list = []
+            output_dir = 'output/%s-%s' % (current_date, current_end_date)
 
             while (last_items_fetched >= 250):
                 logger.debug(
@@ -132,7 +125,7 @@ class ParlisCrawler(object):
                 ).parse()
 
                 file_list += self._format_entities(
-                    self.entity, entity_properties, entities, None, 'output', self.attribute
+                    self.entity, entity_properties, entities, None, output_dir, self.attribute
                 )
 
                 # last_items_fetched = len(entities)
@@ -165,7 +158,7 @@ class ParlisCrawler(object):
                     ).parse(extra_attributes)
 
                     file_list += self._format_entities(
-                        self.entity, relation_properties, relation_entities, relation, 'output', self.attribute
+                        self.entity, relation_properties, relation_entities, relation, output_dir, self.attribute
                     )
                     
                     # add attachments
@@ -175,7 +168,7 @@ class ParlisCrawler(object):
                     
 
             compressor = ParlisZipCompressor()
-            compressor.compress('output/%s-%s.zip' % (current_date, self.entity), list(set(file_list)))
+            compressor.compress('output/%s-%s-%s.zip' % (current_date, current_end_date, self.entity), list(set(file_list)))
 
         logger.debug('Crawling ended, fetched %s urls ..', api.num_requests)
 
