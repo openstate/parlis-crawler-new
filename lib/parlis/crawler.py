@@ -35,7 +35,7 @@ class ParlisCrawler(object):
 
     def _format_entities(self, entity, entity_properties, entities, relation = None, output_dir='output', order_field='GewijzigdOp'):
         file_names = []
-        for entry in sorted(ordered_entities.keys()):
+        for entry in entities:
             file_name = ParlisTSVFormatter(entity_properties).format(
                 entities,
                 entity,
