@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
 PARLIS_HTDOCS_UPDATES=/mnt/projects/appsvoordemocratie/data/htdocs/updates
