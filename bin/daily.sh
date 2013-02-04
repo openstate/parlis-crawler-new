@@ -9,18 +9,12 @@ workon $PARLIS_VIRTUAL_ENV
 
 YESTERDAY=`date -d yesterday '+%Y-%m-%d'`
 
-# Zaken
-./bin/crawler.py -f $YESTERDAY -t $YESTERDAY 2>&1 >$PARLIS_CRAWLER_HOME/daily.log
-# Stemmingen
-./bin/crawler.py -e Stemmingen -f $YESTERDAY -t $YESTERDAY 2>&1 >>$PARLIS_CRAWLER_HOME/daily.log
-# Besluiten
-./bin/crawler.py -e Besluiten -f $YESTERDAY -t $YESTERDAY 2>&1 >>$PARLIS_CRAWLER_HOME/daily.log
-# Documenten
-./bin/crawler.py -e Documenten -f $YESTERDAY -t $YESTERDAY 2>&1 >>$PARLIS_CRAWLER_HOME/daily.log
-# Activiteiten
-./bin/crawler.py -e Activiteiten -f $YESTERDAY -t $YESTERDAY 2>&1 >>$PARLIS_CRAWLER_HOME/daily.log
-# Reserveringen
-./bin/crawler.py -e Reserveringen -f $YESTERDAY -t $YESTERDAY 2>&1 >>$PARLIS_CRAWLER_HOME/daily.log
+for ENTITY in Zaken Stemmingen Besluiten Documenten Activiteiten Reserveringen
+do
+  # Zaken
+  echo "Downloading $ENTITY for $YESTERDAY"
+  ./bin/crawler.py -e $ENTITY -f $YESTERDAY -t $YESTERDAY 2>>$PARLIS_CRAWLER_HOME/daily.err >>$PARLIS_CRAWLER_HOME/daily.log
+done
 
 cd "$PARLIS_CRAWLER_HOME/output"
 find . -name '*.zip' -exec mv \{\} $PARLIS_HTDOCS_UPDATES \;
