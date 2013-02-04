@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
 PARLIS_HTDOCS_UPDATES=/mnt/projects/appsvoordemocratie/data/htdocs/updates
 PARLIS_VIRTUAL_ENV=parlis_new
+
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
 
 cd $PARLIS_CRAWLER_HOME
 workon $PARLIS_VIRTUAL_ENV
