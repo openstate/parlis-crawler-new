@@ -4,24 +4,24 @@ PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
 PARLIS_HTDOCS_UPDATES=/mnt/projects/appsvoordemocratie/data/htdocs/updates
 PARLIS_VIRTUAL_ENV=parlis_new
 
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
+
 cd $PARLIS_CRAWLER_HOME
 workon $PARLIS_VIRTUAL_ENV
 
-FIRST="2008-01-01"
-YESTERDAY=`date -d yesterday '+%Y-%m-%d'`
-
 # Zaken
-./bin/crawler.py -f $FIRST -t $YESTERDAY
+./bin/crawler.py -A
 # Stemmingen
-./bin/crawler.py -e Stemmingen -f $FIRST -t $YESTERDAY
+./bin/crawler.py -e Stemmingen -A
 # Besluiten
-./bin/crawler.py -e Besluiten -f $FIRST -t $YESTERDAY
+./bin/crawler.py -e Besluiten -A
 # Documenten
-./bin/crawler.py -e Documenten -f $FIRST -t $YESTERDAY
+./bin/crawler.py -e Documenten -A
 # Activiteiten
-./bin/crawler.py -e Activiteiten -f $FIRST -t $YESTERDAY
+# ./bin/crawler.py -e Activiteiten -f $FIRST -t $YESTERDAY
 # Reserveringen
-./bin/crawler.py -e Reserveringen -f $FIRST -t $YESTERDAY
+./bin/crawler.py -e Reserveringen -A
 
 cd "$PARLIS_CRAWLER_HOME/output"
 find . -name '*.zip' -exec mv \{\} $PARLIS_HTDOCS_UPDATES \;
