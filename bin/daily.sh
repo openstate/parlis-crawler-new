@@ -12,7 +12,7 @@ workon $PARLIS_VIRTUAL_ENV
 
 YESTERDAY=`date -d yesterday '+%Y-%m-%d'`
 
-for ENTITY in Zaken Stemmingen Besluiten Documenten Activiteiten Reserveringen
+for ENTITY in Zaken Stemmingen Besluiten Documenten Activiteiten Reserveringen KamerstukDossiers
 do
   # Zaken
   echo "Downloading $ENTITY for $YESTERDAY"
