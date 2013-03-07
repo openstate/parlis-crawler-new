@@ -1,12 +1,18 @@
 import datetime
 import logging
 import urllib
+from UserDict import UserDict
 
 import requests
 
 from .utils import date_to_parlis_str
 
 logger = logging.getLogger(__name__)
+
+
+class ParlisStruct:
+    def __init__(self, **entries): 
+        self.__dict__.update(entries)
 
 
 class ParlisAPI(object):
@@ -37,15 +43,19 @@ class ParlisAPI(object):
             real_url = real_url + '$skip=%s' % (params['$skip'], )
 
         logger.info('%s', real_url)
-        result = requests.get(
-            real_url,
-        #    params=params,
-            verify=False,
-            auth=(self.username, self.password)
-        )
-        logger.debug(' %s', result.url)
+        
+        try:
+            result = requests.get(
+                real_url,
+            #    params=params,
+                verify=False,
+                auth=(self.username, self.password)
+            )
+            logger.debug(' %s', result.url)
 
-        self.num_requests += 1
+            self.num_requests += 1
+        except requests.exceptions.ConnectionError, e:
+            result = ParlisStruct(**{'text': u''})
 
         return result
 
