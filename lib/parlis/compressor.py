@@ -14,7 +14,7 @@ class ParlisBaseCompressor(object):
 
 class ParlisZipCompressor(ParlisBaseCompressor):
     def compress(self, file_name, all_file_list):
-        logger.debug("Compressing %s (%s)", file_name, file_list)
+        logger.debug("Compressing %s (%s)", file_name, all_file_list)
 
         total_size = [os.path.getsize(f) for f in all_file_list]
         
