@@ -28,7 +28,7 @@ class ParlisZipCompressor(ParlisBaseCompressor):
                 file_lists.append([tsv_file])
                 size_count = 0
             else:
-                file_lists[-1].append(file_size)
+                file_lists[-1].append(tsv_file)
             size_count += file_size
 
         file_count = 0
