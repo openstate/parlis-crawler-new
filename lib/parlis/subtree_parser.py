@@ -40,7 +40,7 @@ class ParlisSubtreeParser(object):
             for link in entry.iterfind('.//{http://www.w3.org/2005/Atom}link'):
                 if not link.get('rel').startswith('http://schemas.microsoft.com/ado/2007/08/dataservices/related/'):
                     continue
-                if not link.get('type') == u'application/atom+xml;type=feed':
+                if not (link.get('type') == u'application/atom+xml;type=feed' or link.get('type') == u'application/atom+xml;type=entry'):
                     continue
                 relation = link.get('title')
                 urls[(SID, relation)] = u'%s/%s' % (base_url, relation)
