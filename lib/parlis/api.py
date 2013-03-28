@@ -55,7 +55,7 @@ class ParlisAPI(object):
 
             self.num_requests += 1
         except requests.exceptions.ConnectionError, e:
-            result = ParlisStruct(**{'text': u''})
+            result = ParlisStruct(**{'text': u'', 'url': url})
 
         return result
 
@@ -70,7 +70,8 @@ class ParlisAPI(object):
         if not is_hit:
             if not self.fake:
                 result = self.get_request_response(url, params)
-                if self.cache is not None:
+                # do not save empty response since we can't really be sure they're good
+                if (self.cache is not None) and (result.text != u''):
                     self.cache.store(result, entity, relation, result.url, params)
 
                 contents = result.text
