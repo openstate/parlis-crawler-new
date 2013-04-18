@@ -8,7 +8,7 @@ BEGIN {
 }
 
 NR == 1 {
-  for(i=0;i<NF;i++){
+  for(i=0;i<=NF;i++){
     if ($(i)==FIELD_NAME) {
       FIELD_NUM=i;
     }
@@ -16,5 +16,9 @@ NR == 1 {
 }
 
 NR > 1 {
-  print $(FIELD_NUM)
+  if (FIELD_NUM <= NF) {
+    print $(FIELD_NUM);
+  } else {
+    print "NULL";
+  }
 }' $2
