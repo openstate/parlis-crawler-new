@@ -51,7 +51,7 @@ class ParlisParser(object):
             return ([], [])
 
         entries = [e for e in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry')]
-        if (len(entries) == 0) and (xml.tag == '{http://www.w3.org/2005/Atom}entry'):
+        if (len(entries) == 0) and (self.tree.tag == '{http://www.w3.org/2005/Atom}entry'):
             entries = [self.tree]
         for entry in entries:
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
