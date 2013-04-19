@@ -50,7 +50,10 @@ class ParlisParser(object):
         if self.tree is None:
             return ([], [])
 
-        for entry in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry'):
+        entries = [e for e in self.tree.iterfind('.//{http://www.w3.org/2005/Atom}entry')]
+        if len(entries) == 0:
+            entries = [self.tree]
+        for entry in entries:
             SID = entry.find('.//{http://www.w3.org/2005/Atom}id')
             if SID is None:
                 continue
