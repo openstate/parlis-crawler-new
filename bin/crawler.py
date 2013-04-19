@@ -38,14 +38,15 @@ def main(argv=None):
     end_date = datetime.datetime.now().date()
     force = False
     fetch_all = False
-    numeric_level = logging.INFO
+    numeric_level = logging.DEBUG #logging.INFO
+    force_cache = False
 
     if argv is None:
         argv = sys.argv
 
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vFA", ["help", "entity=", "attribute=", "from=", "till=", "force", "all", "log="])
+            opts, args = getopt.getopt(argv[1:], "he:a:f:t:vFAC", ["help", "entity=", "attribute=", "from=", "till=", "force", "all", "log=", "cache"])
         except getopt.error, msg:
             raise Usage(msg)
 
@@ -67,6 +68,8 @@ def main(argv=None):
                 force = True
             if option in ("-A", "--all"):
                 fetch_all = True
+            if option in ("-C", "--cache"):
+                force_cache = True
             if option in ("--log"):
                 numeric_level = getattr(logging, value.upper(), None)
                 if not isinstance(numeric_level, int):
@@ -75,7 +78,7 @@ def main(argv=None):
         logging.basicConfig(level=numeric_level)
         logger.debug('Starting up ...')
         parlis_crawler = parlis.ParlisCrawler(
-            entity, attribute, start_date, end_date, force, fetch_all
+            entity, attribute, start_date, end_date, force, force_cache, fetch_all
         )
         parlis_crawler.run()
 

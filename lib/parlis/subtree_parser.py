@@ -37,6 +37,9 @@ class ParlisSubtreeParser(object):
             # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/ZaakActoren"
             # type="application/atom+xml;type=feed" title="ZaakActoren" 
             # href="Zaken(guid'aec25db9-e037-44a6-8ace-001e313952dd')/ZaakActoren" />
+            # <link rel="http://schemas.microsoft.com/ado/2007/08/dataservices/related/KamerstukDossier" 
+            # type="application/atom+xml;type=entry" title="KamerstukDossier"
+            # href="Zaken(guid'b72a2b31-b662-4eab-a930-07d43d2e3a1d')/KamerstukDossier" />
             for link in entry.iterfind('.//{http://www.w3.org/2005/Atom}link'):
                 if not link.get('rel').startswith('http://schemas.microsoft.com/ado/2007/08/dataservices/related/'):
                     continue

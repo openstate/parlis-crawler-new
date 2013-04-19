@@ -24,11 +24,13 @@ class ParlisCrawler(object):
     end_date = None
     force = False
     fetch_all = False
+    force_cache = False
 
-    def __init__(self, entity='Zaken', attribute='GewijzigdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date(), force=False, fetch_all=False):
+    def __init__(self, entity='Zaken', attribute='GewijzigdOp', start_date=datetime.datetime.now().date(), end_date=datetime.datetime.now().date(), force=False, force_cache=False, fetch_all=False):
         self.entity = entity
         self.attribute = attribute
         self.force = force
+        self.force_cache = force_cache
         self.fetch_all = fetch_all
         if self.fetch_all:
             self.start_date = datetime.datetime.strptime('2008-01-01', '%Y-%m-%d').date()
@@ -112,14 +114,14 @@ class ParlisCrawler(object):
                         self.attribute,
                         current_date,
                         current_end_date,
-                        True
+                        not self.force_cache
                     )
                 else:
                     contents = api.fetch_all(
                         self.entity,
                         None,
                         entity_count,
-                        True
+                        not self.force_cache
                     )
 
                 entity_properties, entities = ParlisParser(
