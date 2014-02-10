@@ -1,14 +1,10 @@
 #!/bin/sh
 
 PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
-PARLIS_HTDOCS_UPDATES=/mnt/projects/appsvoordemocratie/data/htdocs/updates
-PARLIS_VIRTUAL_ENV=parlis_new
-
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
+PARLIS_HTDOCS_UPDATES=/home/breyten/parlis-crawler-new/updates
 
 cd $PARLIS_CRAWLER_HOME
-workon $PARLIS_VIRTUAL_ENV
+source .venv/bin/activate
 
 # Zaken
 ./bin/crawler.py -A
