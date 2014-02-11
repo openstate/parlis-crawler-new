@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PARLIS_CRAWLER_HOME=/home/breyten/parlis-crawler-new
-PARLIS_HTDOCS_UPDATES=/home/breyten/parlis-crawler-new/updates
+PARLIS_HTDOCS_UPDATES=/home/breyten/parlis-crawler-new/html/updates
 
 cd $PARLIS_CRAWLER_HOME
 source .venv/bin/activate
